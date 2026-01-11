@@ -22,11 +22,11 @@
         ]
     },
     "workbench.colorCustomizations": {
-        "[Dark Space]": {
-            "editor.background": "#16161E"
-        },
-        "gitDecoration.modifiedResourceForeground": "#F9E79F",
-        "gitDecoration.untrackedResourceForeground": "#F9E79F"
+      "[Dark Space]": {
+        "editor.background": "#16161E"
+      },
+      "gitDecoration.modifiedResourceForeground": "#F9E79F",
+      "gitDecoration.untrackedResourceForeground": "#F9E79F"
     },
     "pylint.args": [
         "--disable=W0105"
