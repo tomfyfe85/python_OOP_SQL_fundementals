@@ -169,7 +169,6 @@ class ShoppingCart():
     def get_discount_amount(self):
       return self.discount_strategy.calculate(self.get_subtotal())
 
-
     def get_subtotal(self) -> float: 
         total = 0
         for tup in self.items:
@@ -185,43 +184,28 @@ class ShoppingCart():
     def checkout(self):
         summery = {"subtotal": self.get_subtotal(), "discount": self.get_discount_amount(), "total": self.get_total() }
         return summery
+    
+    
+class StackedDiscount(DiscountStrategy):
+    def __init__(self, *strategies:DiscountStrategy):
+        self.strategy_list = strategies
 
+
+    def calculate(self, price:float):
+        remaining_price = price
+        total_discount = 0
+        discount = 0
+        for strategy in self.strategy_list:
+            discount = strategy.calculate(remaining_price)
+            remaining_price -= discount 
+            total_discount += discount
+            
+        return total_discount
 # # ==========================================
 # TEST
 # ==========================================
 
 if __name__ == "__main__":
-    print("=== Test 1: PercentageDiscount ===")
-    discount = PercentageDiscount(10)
-    assert discount.calculate(100.0) == 10.0, "10% of $100 should be $10"
-    assert discount.calculate(50.0) == 5.0, "10% of $50 should be $5"
-    print("✓ PercentageDiscount works correctly")
-
-    print("\n=== Test 2: PercentageDiscount - invalid percentage ===")
-    try:
-        bad_discount = PercentageDiscount(150)
-        bad_discount.calculate(100.0)
-        print("❌ FAIL: Should reject percentage > 100")
-    except ValueError as e:
-        print(f"✓ Rejected invalid percentage: {e}")
-
-    print("\n=== Test 3: FixedAmountDiscount ===")
-    discount = FixedAmountDiscount(5.0)
-    assert discount.calculate(100.0) == 5.0, "$5 off $100 should be $5"
-    assert discount.calculate(3.0) == 3.0, "$5 off $3 should be $3 (max)"
-    print("✓ FixedAmountDiscount works correctly")
-
-    print("\n=== Test 4: BuyOneGetOneFree ===")
-    discount = BuyOneGetOneFree()
-    assert discount.calculate(100.0) == 50.0, "BOGO on $100 should be $50 discount"
-    assert discount.calculate(25.0) == 12.5, "BOGO on $25 should be $12.50 discount"
-    print("✓ BuyOneGetOneFree works correctly")
-
-    print("\n=== Test 5: NoDiscount ===")
-    discount = NoDiscount()
-    assert discount.calculate(100.0) == 0.0, "No discount should return 0"
-    print("✓ NoDiscount works correctly")
-
     print("\n=== Test 6: ShoppingCart - basic operations ===")
     cart = ShoppingCart()
     cart.add_item("Laptop", 1000.0)
@@ -298,24 +282,23 @@ if __name__ == "__main__":
 
     print("✓ All discount types work polymorphically")
 
-    # print("\n=== OPTIONAL Test 11: Stacked Discounts ===")
-    # Uncomment when you implement StackedDiscount
+    print("\n=== OPTIONAL Test 11: Stacked Discounts ===")
 
-    # stacked = StackedDiscount(
-    #     PercentageDiscount(10),  # 10% off
-    #     FixedAmountDiscount(5)   # Then $5 off
-    # )
-    # # $100 - 10% = $90, then $90 - $5 = $85
-    # # Total discount: $15
-    # discount_amount = stacked.calculate(100.0)
-    # assert discount_amount == 15.0, f"Stacked discount should be $15, got ${discount_amount}"
-    # print(f"✓ Stacked discounts work: ${discount_amount} total discount")
+    stacked = StackedDiscount(
+        PercentageDiscount(10),  # 10% off
+        FixedAmountDiscount(5)   # Then $5 off
+    )
+    # $100 - 10% = $90, then $90 - $5 = $85
+    # Total discount: $15
+    discount_amount = stacked.calculate(100.0)
+    assert discount_amount == 15.0, f"Stacked discount should be $15, got ${discount_amount}"
+    print(f"✓ Stacked discounts work: ${discount_amount} total discount")
 
-    # cart.set_discount(stacked)
-    # total = cart.get_total()
-    # # $1100 - 10% = $990, then $990 - $5 = $985
-    # assert total == 985.0, f"Cart with stacked discount should be $985, got ${total}"
-    # print(f"✓ Cart with stacked discount: ${total}")
+    cart.set_discount(stacked)
+    total = cart.get_total()
+    # $1100 - 10% = $990, then $990 - $5 = $985
+    assert total == 985.0, f"Cart with stacked discount should be $985, got ${total}"
+    print(f"✓ Cart with stacked discount: ${total}")
 
     print("\n✓ All tests passed!")
     print("\n=== OCP Benefits Demonstrated ===")

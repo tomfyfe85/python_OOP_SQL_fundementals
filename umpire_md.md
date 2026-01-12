@@ -2,7 +2,7 @@
 
 ## U - UNDERSTAND
 
-[Restate the problem in your own words, identify inputs/outputs, constraints, and edge cases]
+C
 
 **Inputs:** [type and description]
 **Outputs:** [type and description]
@@ -77,8 +77,8 @@ def function_name(param: type) -> return_type:
 
 [Analyze time/space complexity and possible improvements]
 
-**Time Complexity:** O(**_) because [explanation]
-**Space Complexity:** O(_**) because [explanation]
+**Time Complexity:** O(**\_) because [explanation]
+**Space Complexity:** O(\_**) because [explanation]
 **Improvements:** [could you optimize further?]
 **Learned:** [what did you learn from this problem?]
 
