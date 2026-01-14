@@ -92,19 +92,6 @@ THE LSP CHALLENGE:
 ---
 
 
-
----
-
-Step 2: Create editable documents
-
-Class: EditableDocument (inherits Document)
-
-Additional Methods:
-- edit(new_content: str) -> None: Updates content
-- append(text: str) -> None: Adds text to end of content (with a space before)
-
----
-
 Step 3: Create read-only documents (LSP consideration!)
 
 PDFs are read-only after creation. How do we handle this?
@@ -261,7 +248,12 @@ class Document():
 
 
 class EditableDocument(Document):
-    pass
+    def edit(self, new_content:str):
+        self.content = new_content
+
+    def append(self, text:str):
+        self.content = self.content + " " + text
+
 
 
 class PDFDocument(Document):
@@ -290,17 +282,17 @@ if __name__ == "__main__":
     assert info["word_count"] == 3
     print(f"✓ Document created: {info}")
 
-    # print("\n=== Test 2: EditableDocument ===")
-    # editable = EditableDocument("Editable", "original content")
-    # assert editable.read() == "original content"
+    print("\n=== Test 2: EditableDocument ===")
+    editable = EditableDocument("Editable", "original content")
+    assert editable.read() == "original content"
 
-    # editable.edit("new content")
-    # assert editable.read() == "new content"
-    # print("✓ Edit successful")
+    editable.edit("new content")
+    assert editable.read() == "new content"
+    print("✓ Edit successful")
 
-    # editable.append("more text")
-    # assert editable.read() == "new content more text"
-    # print("✓ Append successful")
+    editable.append("more text")
+    assert editable.read() == "new content more text"
+    print("✓ Append successful")
 
     # print("\n=== Test 3: PDFDocument (Read-only) ===")
     # pdf = PDFDocument("Report", "quarterly report data", 125.5)
