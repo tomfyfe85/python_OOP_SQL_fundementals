@@ -1,38 +1,24 @@
-# UMPIRE Problem-Solving Worksheet
 
-**Problem Name:** ________________  **Date:** ________________
 
----
-
-## U - UNDERSTAND
-[Restate the problem in your own words, identify inputs/outputs, constraints, and edge cases]
-
-**Inputs:** [type and description]
-**Outputs:** [type and description]
-**Constraints:** [list all rules and limitations]
-**Edge Cases:** [what could go wrong? boundary conditions?]
-
----
-
-## M - MATCH
-[What similar problems have you solved? What data structures and techniques apply?]
-
-**Similar Problems:**
-**Data Structures:** [lists, dicts, strings, sets?]
-**Patterns/Techniques:** [iteration, validation, string methods, filtering?]
-
----
-
-## P - PLAN
-[Write pseudocode and create test cases BEFORE coding]
-
-**Pseudocode:**
 ```
-function_name(parameters):
-    1. [step]
-    2. [step]
-    return result
-```
+CHALLENGE PART 4: Stacked Discounts (OPTIONAL - for extra practice)
+
+Some stores allow multiple discounts to stack (e.g., 10% off + $5 coupon).
+
+Class: StackedDiscount (inherits from DiscountStrategy)
+
+Attributes:
+- strategies: list[DiscountStrategy] - List of discount strategies to apply
+
+Methods:
+- __init__(*strategies): Accept multiple discount strategies
+- calculate(price): Apply each discount in sequence to the remaining price
+  Example: $100 item with 10% off + $5 off:
+    - After 10% off: $100 - $10 = $90
+    - After $5 off: $90 - $5 = $85
+    - Total discount: $15
+
+This demonstrates OCP: You can combine existing strategies WITHOUT modifying them!
 
 **Test Cases:**
 ```
