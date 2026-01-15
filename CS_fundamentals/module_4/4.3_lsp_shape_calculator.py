@@ -89,27 +89,6 @@ THE LSP CHALLENGE:
 - Only some documents can be edited
 - Don't force read-only documents to implement edit methods they can't support!
 
----
-
-
-Step 3: Create read-only documents (LSP consideration!)
-
-PDFs are read-only after creation. How do we handle this?
-
-Class: PDFDocument (inherits Document)
-
-Additional Attributes:
-- file_size_kb: float
-
-Methods:
-- __init__(title: str, content: str, file_size_kb: float)
-- get_file_size() -> float: Returns file_size_kb
-- get_info() -> dict: Adds "file_size_kb" and "read_only": True to dict
-- NOTE: NO edit() or append() methods - PDFs can't be edited!
-  This is LSP compliant - we're not inheriting methods we can't support.
-
----
-
 Step 4: Document Processor (THE CHALLENGE - like StackedDiscount)
 
 Class: DocumentProcessor
@@ -257,8 +236,18 @@ class EditableDocument(Document):
 
 
 class PDFDocument(Document):
-    pass
+    def __init__(self, title: str, content: str, file_size_kb: float):
+        self.title = title
+        self.content = content
+        self.file_size_kb = file_size_kb
 
+    def get_file_size(self):
+        return self.file_size_kb
+    
+    def get_info(self):
+        current_info_dict = super().get_info()
+        current_info_dict.update({"file_size_kb": self.file_size_kb, "read_only": True})
+        return current_info_dict
 
 class DocumentProcessor:
     pass
@@ -294,16 +283,16 @@ if __name__ == "__main__":
     assert editable.read() == "new content more text"
     print("✓ Append successful")
 
-    # print("\n=== Test 3: PDFDocument (Read-only) ===")
-    # pdf = PDFDocument("Report", "quarterly report data", 125.5)
-    # assert pdf.read() == "quarterly report data"
-    # assert pdf.get_file_size() == 125.5
-    # assert not hasattr(pdf, 'edit'), "PDF should not have edit method"
-    # assert not hasattr(pdf, 'append'), "PDF should not have append method"
-    # info = pdf.get_info()
-    # assert info["read_only"] == True
-    # assert info["file_size_kb"] == 125.5
-    # print(f"✓ PDFDocument (read-only): {info}")
+    print("\n=== Test 3: PDFDocument (Read-only) ===")
+    pdf = PDFDocument("Report", "quarterly report data", 125.5)
+    assert pdf.read() == "quarterly report data"
+    assert pdf.get_file_size() == 125.5
+    assert not hasattr(pdf, 'edit'), "PDF should not have edit method"
+    assert not hasattr(pdf, 'append'), "PDF should not have append method"
+    info = pdf.get_info()
+    assert info["read_only"] == True
+    assert info["file_size_kb"] == 125.5
+    print(f"✓ PDFDocument (read-only): {info}")
 
     # print("\n=== Test 4: DocumentProcessor - Single Transformer ===")
     # uppercase_processor = DocumentProcessor(lambda s: s.upper())
