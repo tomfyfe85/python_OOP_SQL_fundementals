@@ -91,72 +91,6 @@ THE LSP CHALLENGE:
 
 ---
 
-PART 2: Smart Document Library (HARD - Beyond StackedDiscount)
-
-Create a library that manages documents safely using LSP principles.
-
-Class: DocumentLibrary
-
-Attributes:
-- documents: list of Documents (mixed types)
-
-Methods:
-- __init__(): Initialize empty list
-
-- add_document(document: Document) -> None:
-  Add document to library
-
-- read_document(title: str) -> str | None:
-  Find document by title and return its content
-  Return None if not found
-
-- edit_document(title: str, new_content: str) -> bool:
-  Find document by title
-  Check if it's EditableDocument using isinstance()
-  If editable: call edit() and return True
-  If read-only or not found: return False
-  THIS IS THE LSP PATTERN - safely check capabilities!
-
-- bulk_edit(updates: dict[str, str]) -> dict[str, bool]:
-  Takes dictionary of {title: new_content}
-  Try to edit each document
-  Return dictionary of {title: success_bool}
-  Example: {"doc1": True, "doc2": False} means doc1 edited, doc2 failed
-
-- get_editable_documents() -> list[EditableDocument]:
-  Return list of only editable documents
-  Use isinstance() to filter
-
-- get_readonly_documents() -> list[Document]:
-  Return list of documents that are NOT EditableDocument
-  Use isinstance() with not
-
-- process_all_documents(processor: DocumentProcessor) -> dict[str, str]:
-  Process ALL documents (both editable and read-only) through processor
-  Return dictionary of {title: processed_content}
-  THIS DEMONSTRATES LSP - processor works with ANY Document type!
-
-- get_statistics() -> dict:
-  Return:
-  {
-    "total_documents": int,
-    "editable_count": int,
-    "readonly_count": int,
-    "total_words": int (sum of word counts from all docs),
-    "average_words": float (total_words / total_documents)
-  }
-
-THE HARD CHALLENGES:
-1. isinstance() checks to safely handle different document types
-2. bulk_edit processing multiple documents with mixed success
-3. Filtering documents by capability (editable vs read-only)
-4. process_all_documents demonstrating LSP - works with ANY Document
-5. Calculating statistics across mixed document types
-
-This is harder than StackedDiscount because:
-- StackedDiscount: Apply strategies to ONE price
-- DocumentLibrary: Manage MANY documents of DIFFERENT types
-- More isinstance() checks, more edge cases, more complex return types
 
 ---
 
@@ -172,10 +106,6 @@ ESTIMATED TIME: 45-60 minutes
 """
 
 from typing import Callable
-
-# ==========================================
-# YOUR CODE GOES BELOW
-# ==========================================
 
 class Document():
     def __init__(self, title: str, content: str):
@@ -216,10 +146,23 @@ class PDFDocument(Document):
 
 class DocumentProcessor:
     def __init__(self, *transformers: Callable[[str], str]): 
-      pass
+        self.transformers = transformers
+
+    def process(self, document: Document)->str:        
+        next_doc = document.content
+        for transformer in self.transformers:
+            new_doc = transformer(next_doc)
+            next_doc = new_doc
+        return next_doc
+            
+        
 
 class DocumentLibrary:
-    pass
+    def __init__(self):
+        self.document_list = []
+
+    def add_document(self, document: Document) -> None:
+        self.document_list.append(document)
 
 
 # ==========================================
@@ -259,61 +202,61 @@ if __name__ == "__main__":
     assert info["file_size_kb"] == 125.5
     print(f"✓ PDFDocument (read-only): {info}")
 
-    # print("\n=== Test 4: DocumentProcessor - Single Transformer ===")
-    # uppercase_processor = DocumentProcessor(lambda s: s.upper())
-    # doc1 = Document("Test", "hello world")
-    # result = uppercase_processor.process(doc1)
-    # assert result == "HELLO WORLD"
-    # print(f"✓ Single transformer: '{doc1.read()}' -> '{result}'")
+    print("\n=== Test 4: DocumentProcessor - Single Transformer ===")
+    uppercase_processor = DocumentProcessor(lambda s: s.upper())
+    doc1 = Document("Test", "hello world")
+    result = uppercase_processor.process(doc1)
+    assert result == "HELLO WORLD"
+    print(f"✓ Single transformer: '{doc1.read()}' -> '{result}'")
 
-    # print("\n=== Test 5: DocumentProcessor - Multiple Transformers (LIKE STACKED DISCOUNT!) ===")
-    # multi_processor = DocumentProcessor(
-    #     lambda s: s.upper(),           # First: uppercase
-    #     lambda s: s.replace(" ", "_")  # Second: replace spaces
-    # )
-    # result = multi_processor.process(doc1)
-    # assert result == "HELLO_WORLD"
-    # print(f"✓ Multiple transformers: '{doc1.read()}' -> '{result}'")
+    print("\n=== Test 5: DocumentProcessor - Multiple Transformers (LIKE STACKED DISCOUNT!) ===")
+    multi_processor = DocumentProcessor(
+        lambda s: s.upper(),           # First: uppercase
+        lambda s: s.replace(" ", "_")  # Second: replace spaces
+    )
+    result = multi_processor.process(doc1)
+    assert result == "HELLO_WORLD"
+    print(f"✓ Multiple transformers: '{doc1.read()}' -> '{result}'")
 
-    # print("\n=== Test 6: DocumentProcessor - Three Transformers ===")
-    # complex_processor = DocumentProcessor(
-    #     lambda s: s.upper(),
-    #     lambda s: s.replace(" ", "_"),
-    #     lambda s: s + "!!!"
-    # )
-    # result = complex_processor.process(doc1)
-    # assert result == "HELLO_WORLD!!!"
-    # print(f"✓ Three transformers: '{doc1.read()}' -> '{result}'")
+    print("\n=== Test 6: DocumentProcessor - Three Transformers ===")
+    complex_processor = DocumentProcessor(
+        lambda s: s.upper(),
+        lambda s: s.replace(" ", "_"),
+        lambda s: s + "!!!"
+    )
+    result = complex_processor.process(doc1)
+    assert result == "HELLO_WORLD!!!"
+    print(f"✓ Three transformers: '{doc1.read()}' -> '{result}'")
 
-    # print("\n=== Test 7: DocumentProcessor works with ALL document types (LSP!) ===")
-    # processor = DocumentProcessor(lambda s: s.upper())
+    print("\n=== Test 7: DocumentProcessor works with ALL document types (LSP!) ===")
+    processor = DocumentProcessor(lambda s: s.upper())
 
-    # regular = Document("Regular", "test content")
-    # editable = EditableDocument("Editable", "test content")
-    # pdf = PDFDocument("PDF", "test content", 50.0)
+    regular = Document("Regular", "test content")
+    editable = EditableDocument("Editable", "test content")
+    pdf = PDFDocument("PDF", "test content", 50.0)
 
-    # # Processor works with ANY Document type - demonstrates LSP!
-    # assert processor.process(regular) == "TEST CONTENT"
-    # assert processor.process(editable) == "TEST CONTENT"
-    # assert processor.process(pdf) == "TEST CONTENT"
-    # print("✓ Processor works with all document types (LSP compliant!)")
+    # Processor works with ANY Document type - demonstrates LSP!
+    assert processor.process(regular) == "TEST CONTENT"
+    assert processor.process(editable) == "TEST CONTENT"
+    assert processor.process(pdf) == "TEST CONTENT"
+    print("✓ Processor works with all document types (LSP compliant!)")
 
-    # print("\n=== Test 8: DocumentLibrary - Adding Documents ===")
-    # library = DocumentLibrary()
+    print("\n=== Test 8: DocumentLibrary - Adding Documents ===")
+    library = DocumentLibrary()
 
-    # doc1 = Document("Doc1", "content one")
-    # doc2 = EditableDocument("Doc2", "content two")
-    # pdf1 = PDFDocument("PDF1", "content three", 100.0)
+    doc1 = Document("Doc1", "content one")
+    doc2 = EditableDocument("Doc2", "content two")
+    pdf1 = PDFDocument("PDF1", "content three", 100.0)
 
-    # library.add_document(doc1)
-    # library.add_document(doc2)
-    # library.add_document(pdf1)
-    # print("✓ Added 3 documents (1 regular, 1 editable, 1 PDF)")
+    library.add_document(doc1)
+    library.add_document(doc2)
+    library.add_document(pdf1)
+    print("✓ Added 3 documents (1 regular, 1 editable, 1 PDF)")
 
-    # print("\n=== Test 9: DocumentLibrary - Reading ===")
-    # content = library.read_document("Doc1")
-    # assert content == "content one"
-    # print("✓ Read document successfully")
+    print("\n=== Test 9: DocumentLibrary - Reading ===")
+    content = library.read_document("Doc1")
+    assert content == "content one"
+    print("✓ Read document successfully")
 
     # assert library.read_document("NonExistent") is None
     # print("✓ Returns None for non-existent document")
