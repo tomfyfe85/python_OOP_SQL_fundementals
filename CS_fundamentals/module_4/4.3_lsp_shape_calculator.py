@@ -164,6 +164,9 @@ class DocumentLibrary:
     def add_document(self, document: Document) -> None:
         self.document_list.append(document)
 
+    def read_document(title: str) -> str | None:
+        # Find document by title and return its content
+        # Return None if not found
 
 # ==========================================
 # TEST CASES
