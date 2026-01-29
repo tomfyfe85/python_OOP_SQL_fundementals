@@ -1,0 +1,203 @@
+"""
+DSA Course - Module 3: Two Pointers
+===================================
+
+CONCEPT: Two Pointers Technique
+-------------------------------
+Use two pointers to traverse an array, often from opposite ends
+or at different speeds. This often turns O(n^2) into O(n).
+
+TWO MAIN PATTERNS:
+
+1. OPPOSITE ENDS (converging pointers)
+   - Start: left=0, right=len-1
+   - Move toward each other based on some condition
+   - Stop when they meet
+   - Use for: palindrome, two sum on sorted array, container problems
+
+2. SAME DIRECTION (different speeds)
+   - Both start at beginning (or one ahead)
+   - Fast pointer explores, slow pointer marks position
+   - Use for: removing duplicates, partitioning
+
+WHEN TO USE:
+- Array is SORTED (or needs to be)
+- Looking for pairs with some property
+- Need to compare elements from both ends
+- In-place array modification
+"""
+
+
+# ============================================
+# EXAMPLE: Valid Palindrome
+# ============================================
+
+def is_palindrome_example(s: str) -> bool:
+    """
+    Check if string is a palindrome (reads same forwards and backwards).
+    Ignore non-alphanumeric characters and case.
+
+    Strategy:
+    - Use two pointers from opposite ends
+    - Skip non-alphanumeric characters
+    - Compare characters (case-insensitive)
+    - If all match, it's a palindrome
+    """
+    left = 0
+    right = len(s) - 1
+
+    while left < right:
+        # Skip non-alphanumeric from left
+        while left < right and not s[left].isalnum():
+            left += 1
+
+        # Skip non-alphanumeric from right
+        while left < right and not s[right].isalnum():
+            right -= 1
+
+        # Compare (case-insensitive)
+        if s[left].lower() != s[right].lower():
+            return False
+
+        left += 1
+        right -= 1
+
+    return True
+
+
+# Let's trace through: "A man, a plan, a canal: Panama"
+#
+# After cleaning mentally: "amanaplanacanalpanama"
+# left=0 ('A'), right=end ('a'): 'a' == 'a' -> continue
+# left=1 ('m'), right=end-1 ('m'): 'm' == 'm' -> continue
+# ... keeps matching until left >= right
+# Return True
+
+
+# ============================================
+# QUESTION 1: Two Sum II (Sorted Array)
+# ============================================
+
+"""
+PROBLEM: Find two numbers in a SORTED array that add to target.
+
+Given a 1-indexed sorted array and a target, return the indices
+of two numbers that add up to target. (Return 1-indexed!)
+
+Examples:
+- numbers=[2,7,11,15], target=9 -> [1, 2] (2+7=9)
+- numbers=[2,3,4], target=6 -> [1, 3] (2+4=6)
+- numbers=[-1,0], target=-1 -> [1, 2] (-1+0=-1)
+
+HINT: Since array is sorted, use two pointers from opposite ends.
+      - If sum too small: move left pointer right (increase sum)
+      - If sum too big: move right pointer left (decrease sum)
+      - If sum equals target: found it!
+
+NOTE: Return 1-indexed (add 1 to your indices)
+
+Implement the function below:
+"""
+
+
+def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
+    """Return 1-indexed positions of two numbers that sum to target."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
+# QUESTION 2: Reverse String In-Place
+# ============================================
+
+"""
+PROBLEM: Reverse a list of characters IN-PLACE.
+
+Given a list of characters, reverse it. You must do this by modifying
+the input list directly with O(1) extra memory.
+
+Examples:
+- ["h","e","l","l","o"] -> ["o","l","l","e","h"]
+- ["H","a","n","n","a","h"] -> ["h","a","n","n","a","H"]
+
+HINT: Use two pointers from opposite ends.
+      Swap characters at left and right positions.
+      Move pointers toward center.
+
+      To swap in Python: a, b = b, a
+
+Implement the function below:
+"""
+
+
+def reverse_string(s: list[str]) -> None:
+    """Reverse the list in-place. Return nothing."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
+# TEST CASES - Run to verify your solutions
+# ============================================
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("MODULE 3: Two Pointers")
+    print("=" * 60)
+
+    # Test Example
+    print("\n--- Example: Valid Palindrome ---")
+    assert is_palindrome_example("A man, a plan, a canal: Panama") == True
+    assert is_palindrome_example("race a car") == False
+    assert is_palindrome_example(" ") == True
+    print("Example tests passed!")
+
+    # Test Question 1
+    print("\n--- Question 1: Two Sum II (Sorted) ---")
+    try:
+        assert two_sum_sorted([2, 7, 11, 15], 9) == [1, 2], "Basic case"
+        assert two_sum_sorted([2, 3, 4], 6) == [1, 3], "Middle skip"
+        assert two_sum_sorted([-1, 0], -1) == [1, 2], "Negative numbers"
+        assert two_sum_sorted([1, 2, 3, 4, 5], 9) == [4, 5], "End pair"
+        assert two_sum_sorted([1, 2, 3, 4, 5], 3) == [1, 2], "Start pair"
+        print("All Question 1 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 1 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 1 ERROR: {e}")
+
+    # Test Question 2
+    print("\n--- Question 2: Reverse String ---")
+    try:
+        s1 = ["h", "e", "l", "l", "o"]
+        reverse_string(s1)
+        assert s1 == ["o", "l", "l", "e", "h"], "Basic case"
+
+        s2 = ["H", "a", "n", "n", "a", "h"]
+        reverse_string(s2)
+        assert s2 == ["h", "a", "n", "n", "a", "H"], "Palindrome"
+
+        s3 = ["a"]
+        reverse_string(s3)
+        assert s3 == ["a"], "Single element"
+
+        s4 = ["a", "b"]
+        reverse_string(s4)
+        assert s4 == ["b", "a"], "Two elements"
+
+        print("All Question 2 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 2 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 2 ERROR: {e}")
+
+    print("\n" + "=" * 60)
+    print("KEY TAKEAWAYS:")
+    print("=" * 60)
+    print("""
+1. Two pointers from opposite ends: great for sorted arrays
+2. Move pointers based on comparison with target
+3. In-place operations often use two pointers + swapping
+4. Remember: while left < right (not <=, unless needed)
+5. Sorted arrays enable O(n) instead of O(n^2) for pair problems
+""")
