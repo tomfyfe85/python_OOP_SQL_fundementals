@@ -10,15 +10,15 @@ or at different speeds. This often turns O(n^2) into O(n).
 TWO MAIN PATTERNS:
 
 1. OPPOSITE ENDS (converging pointers)
-   - Start: left=0, right=len-1
-   - Move toward each other based on some condition
-   - Stop when they meet
-   - Use for: palindrome, two sum on sorted array, container problems
+    - Start: left=0, right=len-1
+    - Move toward each other based on some condition
+    - Stop when they meet
+    - Use for: palindrome, two sum on sorted array, container problems
 
 2. SAME DIRECTION (different speeds)
-   - Both start at beginning (or one ahead)
-   - Fast pointer explores, slow pointer marks position
-   - Use for: removing duplicates, partitioning
+    - Both start at beginning (or one ahead)
+    - Fast pointer explores, slow pointer marks position
+    - Use for: removing duplicates, partitioning
 
 WHEN TO USE:
 - Array is SORTED (or needs to be)

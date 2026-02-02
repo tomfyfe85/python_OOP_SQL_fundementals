@@ -32,19 +32,28 @@ def binary_gap_template(N):
     pass
 
 
-def binary_gap_solution(N):
-    binary = bin(N)[2:]  # Remove '0b' prefix
-    max_gap = 0
-    current_gap = 0
 
-    for bit in binary:
-        if bit == '0':
-            current_gap += 1
-        else:  # bit == '1'
-            max_gap = max(max_gap, current_gap)
-            current_gap = 0
 
-    return max_gap
+
+
+
+
+
+
+
+# def binary_gap_solution(N):
+#     binary = bin(N)[2:]  # Remove '0b' prefix
+#     max_gap = 0
+#     current_gap = 0
+
+#     for bit in binary:
+#         if bit == '0':
+#             current_gap += 1
+#         else:  # bit == '1'
+#             max_gap = max(max_gap, current_gap)
+#             current_gap = 0
+
+#     return max_gap
 
 
 # ============================================
