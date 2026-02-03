@@ -13,8 +13,8 @@ A comprehensive guide to acing Codility assessments.
 SCORING BREAKDOWN:
 ------------------
 1. Correctness (typically 50-60%):
-   - Does your code produce correct output?
-   - Tests edge cases, typical cases, extreme values
+    - Does your code produce correct output?
+    - Tests edge cases, typical cases, extreme values
 
 2. Performance (typically 40-50%):
    - Does your code run fast enough?
@@ -173,7 +173,7 @@ def complexity_examples():
 
 """
 1. USE PRINT STATEMENTS (they show in output!)
-   print(f"DEBUG: A={A}, current_sum={s}")
+    print(f"DEBUG: A={A}, current_sum={s}")
 
 2. TEST LOCALLY FIRST
    - Write your own test cases

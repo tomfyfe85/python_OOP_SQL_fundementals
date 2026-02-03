@@ -95,21 +95,11 @@ def second_largest(nums: list[int]) -> int | None:
     if not nums:
         return None
     
-    max_val = nums[0]
-    max_val2 = nums[0]
-
-    # if len(set(x for x in nums)) == 1:
-    #     return None
-
-    for num in nums:
-        if num > max_val:
-            print(num)
-            max_val2 = max_val
-            max_val = num
-
-        
-            print(max_val2)
-    return max_val2
+    no_dupes = sorted(set(nums))
+    if len(no_dupes) == 1:
+        return None
+    
+    return no_dupes[-2]
 
 
 
@@ -141,6 +131,50 @@ Implement the function below:
 
 def count_above_average(nums: list[int]) -> int:
     """Return count of elements strictly greater than the average."""
+
+    average = sum(nums)/len(nums)
+    return sum([1 for i in nums if i > average ])
+
+
+
+# ============================================
+# QUESTION 3: Move Zeroes (LeetCode 283)
+# ============================================
+
+"""
+PROBLEM: Move all zeroes to the end while maintaining relative order.
+
+Given an array of integers, move all 0's to the end while keeping
+the relative order of the non-zero elements. Do this IN-PLACE.
+
+Examples:
+- [0, 1, 0, 3, 12] -> [1, 3, 12, 0, 0]
+- [0] -> [0]
+- [1, 2, 3] -> [1, 2, 3] (no zeros, unchanged)
+- [0, 0, 1] -> [1, 0, 0]
+
+HINT: Use a "write pointer" that tracks where the next non-zero should go.
+
+      Iterate through the array:
+      - When you find a non-zero, write it at the write pointer position
+      - Increment the write pointer
+      - After the loop, fill remaining positions with zeros
+
+      Example walkthrough for [0, 1, 0, 3, 12]:
+      write_pos = 0
+      - See 0: skip
+      - See 1: write to pos 0, write_pos = 1 -> [1, 1, 0, 3, 12]
+      - See 0: skip
+      - See 3: write to pos 1, write_pos = 2 -> [1, 3, 0, 3, 12]
+      - See 12: write to pos 2, write_pos = 3 -> [1, 3, 12, 3, 12]
+      - Fill rest with zeros -> [1, 3, 12, 0, 0]
+
+Implement the function below:
+"""
+
+
+def move_zeroes(nums: list[int]) -> None:
+    """Move all zeros to end in-place. Modify nums directly, return nothing."""
     # YOUR CODE HERE
     pass
 
@@ -164,9 +198,9 @@ if __name__ == "__main__":
     # Test Question 1
     print("\n--- Question 1: Second Largest ---")
     try:
-        # assert second_largest([3, 1, 4, 1, 5, 9]) == 5, "Basic case failed"
-        # assert second_largest([1, 1, 1]) is None, "All same should return None"
-        # assert second_largest([5]) is None, "Single element should return None"
+        assert second_largest([3, 1, 4, 1, 5, 9]) == 5, "Basic case failed"
+        assert second_largest([1, 1, 1]) is None, "All same should return None"
+        assert second_largest([5]) is None, "Single element should return None"
         assert second_largest([3, 3, 3, 2]) == 2, "Duplicates of max"
         assert second_largest([1, 2]) == 1, "Two elements"
         assert second_largest([-1, -5, -2]) == -2, "Negative numbers"
@@ -190,6 +224,35 @@ if __name__ == "__main__":
         print(f"Question 2 FAILED: {e}")
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
+
+    # Test Question 3
+    print("\n--- Question 3: Move Zeroes (LeetCode 283) ---")
+    try:
+        nums1 = [0, 1, 0, 3, 12]
+        move_zeroes(nums1)
+        assert nums1 == [1, 3, 12, 0, 0], f"Basic case: got {nums1}"
+
+        nums2 = [0]
+        move_zeroes(nums2)
+        assert nums2 == [0], "Single zero"
+
+        nums3 = [1, 2, 3]
+        move_zeroes(nums3)
+        assert nums3 == [1, 2, 3], "No zeros"
+
+        nums4 = [0, 0, 1]
+        move_zeroes(nums4)
+        assert nums4 == [1, 0, 0], f"Zeros at start: got {nums4}"
+
+        nums5 = [1, 0, 0]
+        move_zeroes(nums5)
+        assert nums5 == [1, 0, 0], "Zeros at end already"
+
+        print("All Question 3 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 3 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 3 ERROR: {e}")
 
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")

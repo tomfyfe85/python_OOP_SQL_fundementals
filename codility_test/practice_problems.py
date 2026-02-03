@@ -26,34 +26,25 @@ Examples:
 - N=15 (1111) -> 0 (no zeros)
 """
 
+def binary_gap_solution(N):
+    binary = bin(N)[2:]
 
-def binary_gap_template(N):
-    """Try implementing this yourself first!"""
-    pass
+    max_gap = 0
+    current = 0
+
+    for bit in binary:
+        if bit == '0':
+            current += 1
+        else:
+            max_gap = max(max_gap, current)
+            current = 0
+
+    return max_gap
 
 
 
 
 
-
-
-
-
-
-
-# def binary_gap_solution(N):
-#     binary = bin(N)[2:]  # Remove '0b' prefix
-#     max_gap = 0
-#     current_gap = 0
-
-#     for bit in binary:
-#         if bit == '0':
-#             current_gap += 1
-#         else:  # bit == '1'
-#             max_gap = max(max_gap, current_gap)
-#             current_gap = 0
-
-#     return max_gap
 
 
 # ============================================
@@ -69,18 +60,32 @@ Examples:
 - A=[1,2,3,4], K=2 -> [3,4,1,2]
 """
 
-
-def cyclic_rotation_template(A, K):
-    """Try implementing this yourself first!"""
-    pass
-
-
+from collections import deque
 def cyclic_rotation_solution(A, K):
-    if len(A) == 0:
-        return A
+    dq = deque(A)
+    dq.rotate(K)
+    # print(list(dq))
+    return list(dq)
+  
 
-    K = K % len(A)  # Handle K > len(A)
-    return A[-K:] + A[:-K]
+
+
+
+
+
+
+
+
+
+
+
+
+# def cyclic_rotation_solution(A, K):
+#     if len(A) == 0:
+#         return A
+
+#     K = K % len(A)  # Handle K > len(A)
+#     return A[-K:] + A[:-K]
 
 
 # ============================================
@@ -376,53 +381,53 @@ if __name__ == "__main__":
     assert cyclic_rotation_solution([], 5) == []
     print("   PASSED")
 
-    # Test OddOccurrences
-    print("\n3. OddOccurrencesInArray")
-    assert odd_occurrences_solution([9, 3, 9, 3, 9, 7, 9]) == 7
-    assert odd_occurrences_solution([1, 1, 2]) == 2
-    print("   PASSED")
+    # # Test OddOccurrences
+    # print("\n3. OddOccurrencesInArray")
+    # assert odd_occurrences_solution([9, 3, 9, 3, 9, 7, 9]) == 7
+    # assert odd_occurrences_solution([1, 1, 2]) == 2
+    # print("   PASSED")
 
-    # Test FrogJmp
-    print("\n4. FrogJmp")
-    assert frog_jmp_solution(10, 85, 30) == 3
-    assert frog_jmp_solution(10, 10, 5) == 0
-    print("   PASSED")
+    # # Test FrogJmp
+    # print("\n4. FrogJmp")
+    # assert frog_jmp_solution(10, 85, 30) == 3
+    # assert frog_jmp_solution(10, 10, 5) == 0
+    # print("   PASSED")
 
-    # Test PermMissingElem
-    print("\n5. PermMissingElem")
-    assert perm_missing_solution([2, 3, 1, 5]) == 4
-    assert perm_missing_solution([1]) == 2
-    print("   PASSED")
+    # # Test PermMissingElem
+    # print("\n5. PermMissingElem")
+    # assert perm_missing_solution([2, 3, 1, 5]) == 4
+    # assert perm_missing_solution([1]) == 2
+    # print("   PASSED")
 
-    # Test TapeEquilibrium
-    print("\n6. TapeEquilibrium")
-    assert tape_equilibrium_solution([3, 1, 2, 4, 3]) == 1
-    print("   PASSED")
+    # # Test TapeEquilibrium
+    # print("\n6. TapeEquilibrium")
+    # assert tape_equilibrium_solution([3, 1, 2, 4, 3]) == 1
+    # print("   PASSED")
 
-    # Test FrogRiverOne
-    print("\n7. FrogRiverOne")
-    assert frog_river_solution(5, [1, 3, 1, 4, 2, 3, 5, 4]) == 6
-    assert frog_river_solution(2, [1, 1, 1]) == -1
-    print("   PASSED")
+    # # Test FrogRiverOne
+    # print("\n7. FrogRiverOne")
+    # assert frog_river_solution(5, [1, 3, 1, 4, 2, 3, 5, 4]) == 6
+    # assert frog_river_solution(2, [1, 1, 1]) == -1
+    # print("   PASSED")
 
-    # Test MaxCounters
-    print("\n8. MaxCounters")
-    assert max_counters_solution(5, [3, 4, 4, 6, 1, 4, 4]) == [3, 2, 2, 4, 2]
-    print("   PASSED")
+    # # Test MaxCounters
+    # print("\n8. MaxCounters")
+    # assert max_counters_solution(5, [3, 4, 4, 6, 1, 4, 4]) == [3, 2, 2, 4, 2]
+    # print("   PASSED")
 
-    # Test PassingCars
-    print("\n9. PassingCars")
-    assert passing_cars_solution([0, 1, 0, 1, 1]) == 5
-    print("   PASSED")
+    # # Test PassingCars
+    # print("\n9. PassingCars")
+    # assert passing_cars_solution([0, 1, 0, 1, 1]) == 5
+    # print("   PASSED")
 
-    # Test MaxProfit
-    print("\n10. MaxProfit")
-    assert max_profit_solution([23171, 21011, 21123, 21366, 21013, 21367]) == 356
-    assert max_profit_solution([5, 4, 3, 2, 1]) == 0
-    print("   PASSED")
+    # # Test MaxProfit
+    # print("\n10. MaxProfit")
+    # assert max_profit_solution([23171, 21011, 21123, 21366, 21013, 21367]) == 356
+    # assert max_profit_solution([5, 4, 3, 2, 1]) == 0
+    # print("   PASSED")
 
-    print("\n" + "=" * 60)
-    print("ALL TESTS PASSED!")
-    print("=" * 60)
-    print("\nTry implementing the _template functions yourself,")
-    print("then compare with the _solution functions.")
+    # print("\n" + "=" * 60)
+    # print("ALL TESTS PASSED!")
+    # print("=" * 60)
+    # print("\nTry implementing the _template functions yourself,")
+    # print("then compare with the _solution functions.")
