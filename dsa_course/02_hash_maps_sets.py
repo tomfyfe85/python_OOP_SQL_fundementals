@@ -131,6 +131,26 @@ def first_unique_char(s: str) -> int:
 
 
 # ============================================
+# REVISION: Quick Review from Module 1
+# ============================================
+
+"""
+REVISION: Find the minimum element in an array.
+
+This is a quick refresher on array iteration from Module 1.
+Solve it WITHOUT using Python's built-in min() function.
+
+Example: [3, 1, 4, 1, 5] -> 1
+"""
+
+
+def revision_find_min(nums: list[int]) -> int:
+    """Return the minimum element in the array."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
 # TEST CASES - Run to verify your solutions
 # ============================================
 
@@ -173,6 +193,19 @@ if __name__ == "__main__":
         print(f"Question 2 FAILED: {e}")
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
+
+    # ==========================================
+    # REVISION: Module 1 (Arrays & Iteration)
+    # ==========================================
+    print("\n--- REVISION: Arrays & Iteration ---")
+    try:
+        assert revision_find_min([3, 1, 4, 1, 5]) == 1, "Find minimum"
+        assert revision_find_min([-5, -2, -10]) == -10, "Negative numbers"
+        print("Revision PASSED!")
+    except AssertionError as e:
+        print(f"Revision FAILED: {e}")
+    except Exception as e:
+        print(f"Revision ERROR: {e}")
 
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")

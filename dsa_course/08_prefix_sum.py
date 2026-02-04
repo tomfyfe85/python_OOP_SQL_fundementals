@@ -190,6 +190,13 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
 
+    # ==========================================
+    # REVISION: Module 7 (Frequency Counting)
+    # ==========================================
+    print("\n--- REVISION: Frequency Counting ---")
+    print("Q: How do you check if two strings are anagrams?")
+    print("A: Counter(s1) == Counter(s2), or count character frequencies manually.")
+
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")
     print("=" * 60)

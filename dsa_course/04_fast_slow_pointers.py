@@ -189,6 +189,25 @@ def is_happy(n: int) -> bool:
 
 
 # ============================================
+# REVISION: Quick Review from Module 3
+# ============================================
+
+"""
+REVISION: Check if a string is a palindrome using two pointers.
+
+Use left and right pointers converging toward the center.
+
+Example: "racecar" -> True, "hello" -> False
+"""
+
+
+def revision_is_palindrome(s: str) -> bool:
+    """Return True if the string is a palindrome."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
 # TEST CASES - Run to verify your solutions
 # ============================================
 
@@ -256,6 +275,19 @@ if __name__ == "__main__":
         print(f"Question 2 FAILED: {e}")
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
+
+    # ==========================================
+    # REVISION: Module 3 (Two Pointers)
+    # ==========================================
+    print("\n--- REVISION: Two Pointers ---")
+    try:
+        assert revision_is_palindrome("racecar") == True
+        assert revision_is_palindrome("hello") == False
+        print("Revision PASSED!")
+    except AssertionError as e:
+        print(f"Revision FAILED: {e}")
+    except Exception as e:
+        print(f"Revision ERROR: {e}")
 
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")

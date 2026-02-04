@@ -1,6 +1,6 @@
 """
-DSA Course - Module 8: Stack Basics
-===================================
+DSA Course - Module 8: Stacks & Monotonic Stacks
+================================================
 
 CONCEPT: Stack Data Structure
 -----------------------------
@@ -26,6 +26,31 @@ WHEN TO USE STACKS:
 THE KEY INSIGHT:
 When you need to remember something and come back to it later
 in REVERSE order, use a stack.
+
+======================================
+MONOTONIC STACK PATTERN
+======================================
+A monotonic stack maintains elements in sorted order (increasing or decreasing).
+When adding a new element, we pop all elements that violate the order.
+
+USE CASES:
+- Next Greater Element (decreasing stack)
+- Next Smaller Element (increasing stack)
+- Stock Span problems
+- Daily Temperatures
+- Largest Rectangle in Histogram
+
+THE PATTERN:
+    for i, num in enumerate(arr):
+        while stack and violates_order(stack[-1], num):
+            popped = stack.pop()
+            # Process popped element - we found its answer!
+        stack.append(num)  # or (num, i) if we need indices
+
+WHY IT WORKS:
+- Elements stay in stack until we find their "answer"
+- When we pop, we've found the first element that beats it
+- O(n) because each element is pushed and popped at most once
 """
 
 
@@ -157,6 +182,86 @@ def next_greater_element(nums: list[int]) -> list[int]:
 
 
 # ============================================
+# QUESTION 3: Daily Temperatures (LeetCode 739)
+# ============================================
+
+"""
+PROBLEM: How many days until warmer temperature?
+
+Given an array of daily temperatures, return an array where answer[i]
+is the number of days you have to wait after day i to get a warmer
+temperature. If there's no future warmer day, use 0.
+
+Examples:
+- [73, 74, 75, 71, 69, 72, 76, 73] -> [1, 1, 4, 2, 1, 1, 0, 0]
+  Day 0 (73): next warmer is day 1 (74), wait 1 day
+  Day 1 (74): next warmer is day 2 (75), wait 1 day
+  Day 2 (75): next warmer is day 6 (76), wait 4 days
+  Day 3 (71): next warmer is day 5 (72), wait 2 days
+  ...
+
+- [30, 40, 50, 60] -> [1, 1, 1, 0]
+
+- [30, 20, 10] -> [0, 0, 0] (temperatures only decrease)
+
+HINT: This is a monotonic stack problem!
+      - Stack stores INDICES (not values) of days waiting for answer
+      - Process left to right
+      - When current temp > temp at stack top, we found the answer
+        for that day: days waited = current index - stored index
+      - Pop and record answer, then push current index
+
+      Stack maintains indices of decreasing temperatures.
+
+Implement the function below:
+"""
+
+
+def daily_temperatures(temperatures: list[int]) -> list[int]:
+    """Return days until warmer temperature for each day."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
+# QUESTION 4: Stock Span Problem
+# ============================================
+
+"""
+PROBLEM: Calculate the stock span for each day.
+
+The span of a stock's price on a given day is the maximum number of
+consecutive days (including today) the price has been <= today's price.
+
+In other words: looking backwards, how many consecutive days had
+price <= today's price?
+
+Examples:
+- [100, 80, 60, 70, 60, 75, 85] -> [1, 1, 1, 2, 1, 4, 6]
+  Day 0 (100): no previous days, span = 1
+  Day 1 (80): 80 < 100, can't look back, span = 1
+  Day 2 (60): 60 < 80, span = 1
+  Day 3 (70): 70 > 60, so day 2 counts. 70 < 80, stop. span = 2
+  Day 4 (60): 60 < 70, span = 1
+  Day 5 (75): 75 > 60, 75 > 70, 75 > 60, 75 < 80. span = 4 (days 2,3,4,5)
+  Day 6 (85): 85 > 75, 85 > 80, 85 < 100. span = 6 (days 1-6)
+
+HINT: Use a stack of (price, index) pairs.
+      - For each day, pop while stack top price <= current price
+      - Span = current_index - index_of_last_higher_price
+      - If stack empty, all previous days were lower -> span = i + 1
+
+Implement the function below:
+"""
+
+
+def stock_span(prices: list[int]) -> list[int]:
+    """Return the span for each day's stock price."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
 # TEST CASES - Run to verify your solutions
 # ============================================
 
@@ -204,6 +309,41 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
 
+    # Test Question 3
+    print("\n--- Question 3: Daily Temperatures ---")
+    try:
+        assert daily_temperatures([73, 74, 75, 71, 69, 72, 76, 73]) == [1, 1, 4, 2, 1, 1, 0, 0]
+        assert daily_temperatures([30, 40, 50, 60]) == [1, 1, 1, 0]
+        assert daily_temperatures([30, 20, 10]) == [0, 0, 0]
+        assert daily_temperatures([50]) == [0]
+        assert daily_temperatures([50, 50, 50]) == [0, 0, 0]
+        print("All Question 3 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 3 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 3 ERROR: {e}")
+
+    # Test Question 4
+    print("\n--- Question 4: Stock Span ---")
+    try:
+        assert stock_span([100, 80, 60, 70, 60, 75, 85]) == [1, 1, 1, 2, 1, 4, 6]
+        assert stock_span([10, 20, 30, 40]) == [1, 2, 3, 4]
+        assert stock_span([40, 30, 20, 10]) == [1, 1, 1, 1]
+        assert stock_span([100]) == [1]
+        assert stock_span([10, 10, 10]) == [1, 2, 3]
+        print("All Question 4 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 4 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 4 ERROR: {e}")
+
+    # ==========================================
+    # REVISION: Module 8 (Prefix Sum)
+    # ==========================================
+    print("\n--- REVISION: Prefix Sum ---")
+    print("Q: How do you get the sum of elements from index i to j using prefix sums?")
+    print("A: sum(i to j) = prefix[j+1] - prefix[i]")
+
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")
     print("=" * 60)
@@ -211,6 +351,7 @@ if __name__ == "__main__":
 1. Stack = LIFO (Last In, First Out)
 2. In Python: list with append() and pop()
 3. Use for matching/pairing problems
-4. Use for "next greater/smaller" problems (monotonic stack)
-5. Key question: "Do I need to remember and return in reverse order?"
+4. MONOTONIC STACK: maintains sorted order, O(n) for "next greater/smaller"
+5. Pattern: pop elements that current element "defeats", then push current
+6. Store indices when you need positions, values when you need comparisons
 """)

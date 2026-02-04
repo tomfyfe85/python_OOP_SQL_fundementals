@@ -137,6 +137,25 @@ def reverse_string(s: list[str]) -> None:
 
 
 # ============================================
+# REVISION: Quick Review from Module 2
+# ============================================
+
+"""
+REVISION: Check if two numbers in a SET sum to target.
+
+Use a set for O(1) lookup. For each number, check if its complement exists.
+
+Example: nums={2, 7, 11, 15}, target=9 -> True (2+7=9)
+"""
+
+
+def revision_two_sum(nums: set[int], target: int) -> bool:
+    """Return True if any two numbers in the set sum to target."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
 # TEST CASES - Run to verify your solutions
 # ============================================
 
@@ -190,6 +209,19 @@ if __name__ == "__main__":
         print(f"Question 2 FAILED: {e}")
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
+
+    # ==========================================
+    # REVISION: Module 2 (Hash Maps & Sets)
+    # ==========================================
+    print("\n--- REVISION: Hash Maps & Sets ---")
+    try:
+        assert revision_two_sum({2, 7, 11, 15}, 9) == True, "Sum exists"
+        assert revision_two_sum({1, 2, 3}, 10) == False, "Sum doesn't exist"
+        print("Revision PASSED!")
+    except AssertionError as e:
+        print(f"Revision FAILED: {e}")
+    except Exception as e:
+        print(f"Revision ERROR: {e}")
 
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")

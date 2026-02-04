@@ -215,6 +215,13 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
 
+    # ==========================================
+    # REVISION: Module 9 (Stacks)
+    # ==========================================
+    print("\n--- REVISION: Stacks ---")
+    print("Q: What's a monotonic stack and when would you use it?")
+    print("A: A stack that maintains sorted order. Use for 'next greater/smaller element' problems.")
+
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")
     print("=" * 60)

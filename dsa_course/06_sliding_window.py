@@ -197,6 +197,13 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")
     print("=" * 60)
+    # ==========================================
+    # REVISION: Module 5 (Linked Lists)
+    # ==========================================
+    print("\n--- REVISION: Linked Lists ---")
+    print("Q: Why use a dummy head node when modifying linked lists?")
+    print("A: It simplifies edge cases like removing the first node - you always have a valid 'previous' node.")
+
     print("""
 1. Fixed window: slide by removing left, adding right
 2. Variable window: expand to explore, shrink to optimize

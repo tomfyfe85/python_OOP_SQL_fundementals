@@ -198,6 +198,13 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
 
+    # ==========================================
+    # REVISION: Module 6 (Sliding Window)
+    # ==========================================
+    print("\n--- REVISION: Sliding Window ---")
+    print("Q: What's the difference between fixed and variable sliding window?")
+    print("A: Fixed: window size stays constant (slide). Variable: expand/shrink based on conditions.")
+
     print("\n" + "=" * 60)
     print("KEY TAKEAWAYS:")
     print("=" * 60)
