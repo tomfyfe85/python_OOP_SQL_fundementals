@@ -414,6 +414,10 @@ if __name__ == "__main__":
         head = list_to_linked([1, 2])
         assert find_middle(head).val == 2, "Two nodes"
 
+        # Edge cases
+        head = list_to_linked([1, 2, 3])
+        assert find_middle(head).val == 2, "Three nodes"
+
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

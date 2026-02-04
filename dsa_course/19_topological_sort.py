@@ -391,6 +391,9 @@ if __name__ == "__main__":
         assert minimum_semesters(1, []) == 1
         assert minimum_semesters(3, [[1, 2], [2, 3]]) == 3  # Sequential
 
+        # Edge cases
+        assert minimum_semesters(4, [[1, 4], [2, 4], [3, 4]]) == 2, "All point to one"
+
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

@@ -359,6 +359,9 @@ if __name__ == "__main__":
         assert unique_paths(1, 1) == 1
         assert unique_paths(2, 2) == 2
         assert unique_paths(3, 3) == 6
+        # Edge cases
+        assert unique_paths(1, 5) == 1, "Single row"
+        assert unique_paths(5, 1) == 1, "Single column"
         print("All Question 5 tests PASSED!")
     except AssertionError as e:
         print(f"Question 5 FAILED: {e}")

@@ -338,6 +338,9 @@ if __name__ == "__main__":
         assert interval_intersection([], [[4, 8], [10, 12]]) == []
         assert interval_intersection([[1, 7]], [[3, 10]]) == [[3, 7]]
 
+        # Edge cases
+        assert interval_intersection([[1, 2]], [[1, 2]]) == [[1, 2]], "Same interval"
+
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

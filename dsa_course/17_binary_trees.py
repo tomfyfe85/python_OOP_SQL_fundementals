@@ -484,6 +484,8 @@ if __name__ == "__main__":
         assert is_valid_bst(build_tree([1])) == True
         # Edge case: [5, 4, 6, None, None, 3, 7] - 3 is in right subtree but < 5
         assert is_valid_bst(build_tree([5, 4, 6, None, None, 3, 7])) == False
+        # More edge cases
+        assert is_valid_bst(build_tree([1, 1])) == False, "Duplicate values"
         print("All Question 5 tests PASSED!")
     except AssertionError as e:
         print(f"Question 5 FAILED: {e}")

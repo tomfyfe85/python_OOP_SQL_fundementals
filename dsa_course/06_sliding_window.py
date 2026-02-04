@@ -188,6 +188,9 @@ if __name__ == "__main__":
         assert length_of_longest_substring("") == 0, "empty"
         assert length_of_longest_substring("a") == 1, "single"
         assert length_of_longest_substring("abcdef") == 6, "all unique"
+        # Edge cases
+        assert length_of_longest_substring("dvdf") == 3, "dvdf -> vdf"
+        assert length_of_longest_substring("aab") == 2, "aab -> ab"
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")

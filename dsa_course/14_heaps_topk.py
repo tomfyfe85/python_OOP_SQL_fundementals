@@ -342,6 +342,11 @@ if __name__ == "__main__":
         mf2.add_num(2)
         assert mf2.find_median() == 6.0
 
+        # Edge cases
+        mf3 = MedianFinder()
+        mf3.add_num(5)
+        assert mf3.find_median() == 5.0, "Single element"
+
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

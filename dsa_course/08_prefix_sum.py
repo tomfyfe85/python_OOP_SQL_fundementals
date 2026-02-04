@@ -184,6 +184,9 @@ if __name__ == "__main__":
         assert subarray_sum([1], 1) == 1, "Single element"
         assert subarray_sum([1, -1, 0], 0) == 3, "With negatives"
         assert subarray_sum([1, 2, 1, 2, 1], 3) == 4, "Multiple"
+        # Edge cases
+        assert subarray_sum([0, 0, 0], 0) == 6, "All zeros"
+        assert subarray_sum([1], 0) == 0, "No subarray sums to 0"
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")

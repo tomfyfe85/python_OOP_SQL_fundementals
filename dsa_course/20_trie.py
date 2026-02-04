@@ -403,6 +403,8 @@ if __name__ == "__main__":
         assert longest_word(["a", "banana", "app", "appl", "ap", "apply", "apple"]) == "apple"
         assert longest_word(["a", "b", "c"]) == "a"  # Lexicographically smallest
         assert longest_word([]) == ""
+        # Edge cases
+        assert longest_word(["a"]) == "a", "Single word"
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

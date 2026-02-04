@@ -476,6 +476,9 @@ if __name__ == "__main__":
         assert count_components(4, []) == 4
         assert count_components(1, []) == 1
 
+        # Edge cases
+        assert count_components(3, [[0, 1], [0, 2]]) == 1, "Star graph"
+
         print("All Question 5 tests PASSED!")
     except AssertionError as e:
         print(f"Question 5 FAILED: {e}")

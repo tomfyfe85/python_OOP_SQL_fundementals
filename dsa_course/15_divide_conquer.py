@@ -348,6 +348,9 @@ if __name__ == "__main__":
         assert max_subarray_dc([5, 4, -1, 7, 8]) == 23
         assert max_subarray_dc([-1]) == -1
         assert max_subarray_dc([-2, -1]) == -1
+        # Edge cases
+        assert max_subarray_dc([1, 2, 3]) == 6, "All positive"
+        assert max_subarray_dc([-1, -2, -3]) == -1, "All negative"
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

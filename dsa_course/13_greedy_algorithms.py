@@ -340,6 +340,8 @@ if __name__ == "__main__":
         assert least_interval(["A", "A", "A", "B", "B", "B"], 0) == 6
         assert least_interval(["A", "A", "A", "A", "A", "A", "B", "C", "D", "E", "F", "G"], 2) == 16
         assert least_interval(["A"], 2) == 1
+        # Edge cases
+        assert least_interval(["A", "B"], 2) == 2, "Two different tasks"
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

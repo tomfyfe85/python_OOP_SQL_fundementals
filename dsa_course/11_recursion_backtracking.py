@@ -402,6 +402,11 @@ if __name__ == "__main__":
         assert sorted([sorted(c) for c in result2]) == sorted([sorted(c) for c in expected2])
 
         assert combination_sum([2], 1) == []
+
+        # Edge cases
+        result3 = combination_sum([1], 3)
+        assert [1, 1, 1] in result3, "Single coin repeated"
+
         print("All Question 5 tests PASSED!")
     except AssertionError as e:
         print(f"Question 5 FAILED: {e}")

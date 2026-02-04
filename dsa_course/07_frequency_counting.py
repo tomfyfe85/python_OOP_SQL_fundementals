@@ -192,6 +192,8 @@ if __name__ == "__main__":
         assert majority_element([2, 2, 1, 1, 1, 2, 2]) == 2, "Longer array"
         assert majority_element([1]) == 1, "Single element"
         assert majority_element([1, 1, 1, 1]) == 1, "All same"
+        # Edge cases
+        assert majority_element([1, 2, 1]) == 1, "Simple majority"
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")

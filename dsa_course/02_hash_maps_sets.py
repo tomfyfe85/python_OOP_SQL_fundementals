@@ -174,6 +174,9 @@ if __name__ == "__main__":
         assert contains_duplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2]) == True
         assert contains_duplicate([]) == False, "Empty array"
         assert contains_duplicate([1]) == False, "Single element"
+        # Edge cases
+        assert contains_duplicate([1, 2, 3, 4, 5, 1]) == True, "Duplicate at end"
+        assert contains_duplicate([1, 1]) == True, "Two same elements"
         print("All Question 1 tests PASSED!")
     except AssertionError as e:
         print(f"Question 1 FAILED: {e}")
@@ -188,6 +191,9 @@ if __name__ == "__main__":
         assert first_unique_char("aabb") == -1, "No unique char"
         assert first_unique_char("a") == 0, "Single char"
         assert first_unique_char("aadadaad") == -1, "No unique"
+        # Edge cases
+        assert first_unique_char("") == -1, "Empty string"
+        assert first_unique_char("cc") == -1, "All duplicates"
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")

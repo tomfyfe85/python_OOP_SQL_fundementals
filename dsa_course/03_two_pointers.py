@@ -204,6 +204,15 @@ if __name__ == "__main__":
         reverse_string(s4)
         assert s4 == ["b", "a"], "Two elements"
 
+        # Edge cases
+        s5 = []
+        reverse_string(s5)
+        assert s5 == [], "Empty list"
+
+        s6 = ["a", "b", "c"]
+        reverse_string(s6)
+        assert s6 == ["c", "b", "a"], "Odd number of elements"
+
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")

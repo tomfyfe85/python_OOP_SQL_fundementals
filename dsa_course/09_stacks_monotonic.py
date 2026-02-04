@@ -331,6 +331,8 @@ if __name__ == "__main__":
         assert stock_span([40, 30, 20, 10]) == [1, 1, 1, 1]
         assert stock_span([100]) == [1]
         assert stock_span([10, 10, 10]) == [1, 2, 3]
+        # Edge cases
+        assert stock_span([10, 20, 10]) == [1, 2, 1]
         print("All Question 4 tests PASSED!")
     except AssertionError as e:
         print(f"Question 4 FAILED: {e}")

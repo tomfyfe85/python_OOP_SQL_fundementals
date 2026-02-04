@@ -209,6 +209,10 @@ if __name__ == "__main__":
         _bad_version = 50
         assert first_bad_version(100) == 50, "Larger n"
 
+        # Edge cases
+        _bad_version = 2
+        assert first_bad_version(2) == 2, "Bad is last of 2"
+
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")

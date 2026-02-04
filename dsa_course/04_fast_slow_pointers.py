@@ -270,6 +270,9 @@ if __name__ == "__main__":
         assert is_happy(1) == True, "1 is happy"
         assert is_happy(7) == True, "7 is happy"
         assert is_happy(4) == False, "4 is not happy"
+        # Edge cases
+        assert is_happy(100) == True, "100 -> 1"
+        assert is_happy(10) == True, "10 is happy"
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")
