@@ -29,46 +29,39 @@ want a set instead. This turns O(n^2) into O(n).
 
 
 # ============================================
-# EXAMPLE: Two Sum (Classic LeetCode #1)
+# EXAMPLE: Using a Set for Membership
 # ============================================
 
-def two_sum_example(nums: list[int], target: int) -> list[int]:
+def find_intersection_example(nums1: list[int], nums2: list[int]) -> list[int]:
     """
-    Find two numbers that add up to target. Return their indices.
+    Find common elements between two arrays.
 
-    Brute force: Check every pair - O(n^2)
-    Hash map: For each num, check if (target - num) exists - O(n)
+    Brute force: For each element in nums1, check if in nums2 - O(n*m)
+    With set: Convert nums2 to set, then check membership - O(n+m)
 
     Strategy:
-    - For each number, we need to find if its "complement" exists
-    - complement = target - current_number
-    - Store numbers we've seen in a dict: {value: index}
+    - Convert one list to a set for O(1) lookups
+    - Iterate through the other list, checking membership
     """
-    seen = {}  # value -> index
+    set2 = set(nums2)
+    result = []
 
-    for i, num in enumerate(nums):
-        complement = target - num
+    for num in nums1:
+        if num in set2:
+            result.append(num)
+            set2.remove(num)  # Avoid duplicates in result
 
-        if complement in seen:
-            # Found it! Return both indices
-            return [seen[complement], i]
-
-        # Haven't found pair yet, store this number
-        seen[num] = i
-
-    return []  # No solution found
+    return result
 
 
-# Let's trace through: nums=[2, 7, 11, 15], target=9
+# Let's trace through: nums1=[1, 2, 2, 1], nums2=[2, 2]
 #
-# i=0, num=2: complement=7, seen={}, 7 not in seen, seen={2:0}
-# i=1, num=7: complement=2, seen={2:0}, 2 IS in seen! Return [0, 1]
-#
-# Why this works:
-# - We need two numbers that sum to 9
-# - When we see 7, we ask "is there a number that adds to 9?"
-# - That number is 9-7=2
-# - We check if 2 was seen before -> YES at index 0
+# set2 = {2}
+# num=1: 1 not in set2, skip
+# num=2: 2 in set2, add to result, remove from set2
+# num=2: 2 not in set2 (already removed), skip
+# num=1: 1 not in set2, skip
+# Return [2]
 
 
 # ============================================
@@ -97,9 +90,13 @@ Implement the function below:
 
 def contains_duplicate(nums: list[int]) -> bool:
     """Return True if any element appears more than once."""
-    # YOUR CODE HERE
-    pass
+    seen = set()
 
+    for num in nums:
+        if num in seen:
+            return True
+        seen.add(num)
+    return False
 
 # ============================================
 # QUESTION 2: First Unique Character
@@ -123,9 +120,51 @@ HINT: Two-pass approach:
 Implement the function below:
 """
 
-
+from collections import Counter
 def first_unique_char(s: str) -> int:
     """Return index of first non-repeating character, or -1."""
+    cnt = Counter()
+    split = list(s)
+    for char in split:
+        cnt[char] += 1
+    
+    if 1 not in cnt.values():
+        return -1
+    for k,v in cnt.items():
+        if v == 1:
+            return split.index(k)
+        
+
+
+
+# ============================================
+# QUESTION 3: Two Sum (LeetCode #1)
+# ============================================
+
+"""
+PROBLEM: Find two numbers that add up to target. Return their indices.
+
+This is THE classic LeetCode problem #1. It demonstrates the power
+of using a hash map for O(n) lookups.
+
+Examples:
+- nums=[2, 7, 11, 15], target=9 -> [0, 1] (2+7=9)
+- nums=[3, 2, 4], target=6 -> [1, 2] (2+4=6)
+- nums=[3, 3], target=6 -> [0, 1] (3+3=6)
+
+HINT: For each number, calculate its complement (target - num).
+      Check if the complement was seen before using a dict.
+      Store {value: index} as you go.
+
+      Brute force: Check every pair - O(n^2)
+      Hash map: For each num, check if (target - num) exists - O(n)
+
+Implement the function below:
+"""
+
+
+def two_sum(nums: list[int], target: int) -> list[int]:
+    """Find two numbers that add up to target. Return their indices."""
     # YOUR CODE HERE
     pass
 
@@ -160,10 +199,10 @@ if __name__ == "__main__":
     print("=" * 60)
 
     # Test Example
-    print("\n--- Example: Two Sum ---")
-    assert two_sum_example([2, 7, 11, 15], 9) == [0, 1]
-    assert two_sum_example([3, 2, 4], 6) == [1, 2]
-    assert two_sum_example([3, 3], 6) == [0, 1]
+    print("\n--- Example: Find Intersection ---")
+    assert find_intersection_example([1, 2, 2, 1], [2, 2]) == [2]
+    assert find_intersection_example([4, 9, 5], [9, 4, 9, 8, 4]) == [4, 9] or \
+           find_intersection_example([4, 9, 5], [9, 4, 9, 8, 4]) == [9, 4]
     print("Example tests passed!")
 
     # Test Question 1
@@ -199,6 +238,20 @@ if __name__ == "__main__":
         print(f"Question 2 FAILED: {e}")
     except Exception as e:
         print(f"Question 2 ERROR: {e}")
+
+    # Test Question 3 (LeetCode #1)
+    print("\n--- Question 3: Two Sum (LeetCode #1) ---")
+    try:
+        assert two_sum([2, 7, 11, 15], 9) == [0, 1], "Basic case"
+        assert two_sum([3, 2, 4], 6) == [1, 2], "Not first two"
+        assert two_sum([3, 3], 6) == [0, 1], "Same numbers"
+        # Edge cases
+        assert two_sum([1, 2, 3, 4, 5], 9) == [3, 4], "Target at end"
+        print("All Question 3 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 3 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 3 ERROR: {e}")
 
     # ==========================================
     # REVISION: Module 1 (Arrays & Iteration)

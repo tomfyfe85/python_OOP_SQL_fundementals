@@ -238,21 +238,21 @@ if __name__ == "__main__":
     # Test Question 3
     print("\n--- Question 3: Move Zeroes (LeetCode 283) ---")
     try:
-        # nums1 = [0, 1, 0, 3, 12]
-        # move_zeroes(nums1)
-        # assert nums1 == [1, 3, 12, 0, 0], f"Basic case: got {nums1}"
+        nums1 = [0, 1, 0, 3, 12]
+        move_zeroes(nums1)
+        assert nums1 == [1, 3, 12, 0, 0], f"Basic case: got {nums1}"
 
-        # nums2 = [0]
-        # move_zeroes(nums2)
-        # assert nums2 == [0], "Single zero"
+        nums2 = [0]
+        move_zeroes(nums2)
+        assert nums2 == [0], "Single zero"
 
-        # nums3 = [1, 2, 3]
-        # move_zeroes(nums3)
-        # assert nums3 == [1, 2, 3], "No zeros"
+        nums3 = [1, 2, 3]
+        move_zeroes(nums3)
+        assert nums3 == [1, 2, 3], "No zeros"
 
-        # nums4 = [0, 0, 1]
-        # move_zeroes(nums4)
-        # assert nums4 == [1, 0, 0], f"Zeros at start: got {nums4}"
+        nums4 = [0, 0, 1]
+        move_zeroes(nums4)
+        assert nums4 == [1, 0, 0], f"Zeros at start: got {nums4}"
 
         nums5 = [1, 0, 0]
         move_zeroes(nums5)

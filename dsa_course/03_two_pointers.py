@@ -75,39 +75,7 @@ def is_palindrome_example(s: str) -> bool:
 
 
 # ============================================
-# QUESTION 1: Two Sum II (Sorted Array)
-# ============================================
-
-"""
-PROBLEM: Find two numbers in a SORTED array that add to target.
-
-Given a 1-indexed sorted array and a target, return the indices
-of two numbers that add up to target. (Return 1-indexed!)
-
-Examples:
-- numbers=[2,7,11,15], target=9 -> [1, 2] (2+7=9)
-- numbers=[2,3,4], target=6 -> [1, 3] (2+4=6)
-- numbers=[-1,0], target=-1 -> [1, 2] (-1+0=-1)
-
-HINT: Since array is sorted, use two pointers from opposite ends.
-      - If sum too small: move left pointer right (increase sum)
-      - If sum too big: move right pointer left (decrease sum)
-      - If sum equals target: found it!
-
-NOTE: Return 1-indexed (add 1 to your indices)
-
-Implement the function below:
-"""
-
-
-def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
-    """Return 1-indexed positions of two numbers that sum to target."""
-    # YOUR CODE HERE
-    pass
-
-
-# ============================================
-# QUESTION 2: Reverse String In-Place
+# QUESTION 1: Reverse String In-Place
 # ============================================
 
 """
@@ -132,6 +100,41 @@ Implement the function below:
 
 def reverse_string(s: list[str]) -> None:
     """Reverse the list in-place. Return nothing."""
+    # YOUR CODE HERE
+    pass
+
+
+# ============================================
+# QUESTION 2: Two Sum II - Sorted Array (LeetCode #167)
+# ============================================
+
+"""
+PROBLEM: Find two numbers in a SORTED array that add to target.
+
+This is LeetCode #167 and demonstrates the power of two pointers
+on sorted data - we get O(n) instead of O(n^2).
+
+Given a 1-indexed sorted array and a target, return the indices
+of two numbers that add up to target. (Return 1-indexed!)
+
+Examples:
+- numbers=[2,7,11,15], target=9 -> [1, 2] (2+7=9)
+- numbers=[2,3,4], target=6 -> [1, 3] (2+4=6)
+- numbers=[-1,0], target=-1 -> [1, 2] (-1+0=-1)
+
+HINT: Since array is sorted, use two pointers from opposite ends.
+      - If sum too small: move left pointer right (increase sum)
+      - If sum too big: move right pointer left (decrease sum)
+      - If sum equals target: found it!
+
+NOTE: Return 1-indexed (add 1 to your indices)
+
+Implement the function below:
+"""
+
+
+def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
+    """Return 1-indexed positions of two numbers that sum to target."""
     # YOUR CODE HERE
     pass
 
@@ -172,21 +175,7 @@ if __name__ == "__main__":
     print("Example tests passed!")
 
     # Test Question 1
-    print("\n--- Question 1: Two Sum II (Sorted) ---")
-    try:
-        assert two_sum_sorted([2, 7, 11, 15], 9) == [1, 2], "Basic case"
-        assert two_sum_sorted([2, 3, 4], 6) == [1, 3], "Middle skip"
-        assert two_sum_sorted([-1, 0], -1) == [1, 2], "Negative numbers"
-        assert two_sum_sorted([1, 2, 3, 4, 5], 9) == [4, 5], "End pair"
-        assert two_sum_sorted([1, 2, 3, 4, 5], 3) == [1, 2], "Start pair"
-        print("All Question 1 tests PASSED!")
-    except AssertionError as e:
-        print(f"Question 1 FAILED: {e}")
-    except Exception as e:
-        print(f"Question 1 ERROR: {e}")
-
-    # Test Question 2
-    print("\n--- Question 2: Reverse String ---")
+    print("\n--- Question 1: Reverse String ---")
     try:
         s1 = ["h", "e", "l", "l", "o"]
         reverse_string(s1)
@@ -213,6 +202,20 @@ if __name__ == "__main__":
         reverse_string(s6)
         assert s6 == ["c", "b", "a"], "Odd number of elements"
 
+        print("All Question 1 tests PASSED!")
+    except AssertionError as e:
+        print(f"Question 1 FAILED: {e}")
+    except Exception as e:
+        print(f"Question 1 ERROR: {e}")
+
+    # Test Question 2 (LeetCode #167)
+    print("\n--- Question 2: Two Sum II - Sorted (LeetCode #167) ---")
+    try:
+        assert two_sum_sorted([2, 7, 11, 15], 9) == [1, 2], "Basic case"
+        assert two_sum_sorted([2, 3, 4], 6) == [1, 3], "Middle skip"
+        assert two_sum_sorted([-1, 0], -1) == [1, 2], "Negative numbers"
+        assert two_sum_sorted([1, 2, 3, 4, 5], 9) == [4, 5], "End pair"
+        assert two_sum_sorted([1, 2, 3, 4, 5], 3) == [1, 2], "Start pair"
         print("All Question 2 tests PASSED!")
     except AssertionError as e:
         print(f"Question 2 FAILED: {e}")
