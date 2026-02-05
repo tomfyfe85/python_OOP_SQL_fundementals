@@ -123,17 +123,12 @@ Implement the function below:
 from collections import Counter
 def first_unique_char(s: str) -> int:
     """Return index of first non-repeating character, or -1."""
-    cnt = Counter()
-    split = list(s)
-    for char in split:
-        cnt[char] += 1
-    
-    if 1 not in cnt.values():
-        return -1
-    for k,v in cnt.items():
-        if v == 1:
-            return split.index(k)
-        
+    cnt = Counter(s)
+    for i, char in enumerate(s):
+        if cnt[char] == 1:
+            return i
+    return -1
+
 
 
 

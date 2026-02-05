@@ -62,20 +62,18 @@ LSP VIOLATION PATTERNS
 ===================================
 
 1. THROWING UNEXPECTED EXCEPTIONS
-   Parent: method works
-   Child: method throws exception
-
-2. STRENGTHENING PRECONDITIONS
-   Parent: accepts 0-100
-   Child: only accepts 50-100
-
-3. WEAKENING POSTCONDITIONS
-   Parent: always returns positive
-   Child: sometimes returns negative
+    Parent: method works
+    Child: method throws exceptio   
+2   STRENGTHENING PRECONDITIONS
+    Parent: accepts 0-100
+    Child: only accepts 50-10   
+3   WEAKENING POSTCONDITIONS
+    Parent: always returns positive
+    Child: sometimes returns negative
 
 4. CHANGING SIDE EFFECTS
-   Parent: set_width() only changes width
-   Child: set_width() changes width AND height (Square inheriting Rectangle!)
+    Parent: set_width() only changes width
+    Child: set_width() changes width AND height (Square inheriting Rectangle!)
 
 ===================================
 EXERCISE: Document Processing System
@@ -164,9 +162,59 @@ class DocumentLibrary:
     def add_document(self, document: Document) -> None:
         self.document_list.append(document)
 
-    def read_document(title: str) -> str | None:
+    def read_document(self, title: str) -> str | None:
         # Find document by title and return its content
         # Return None if not found
+        for document in self.document_list:
+            if document.title == title:
+                return document.read()
+        return None
+
+    def edit_document(self, title: str, new_content: str) -> bool:
+        # Edit document if it's editable
+        for document in self.document_list:
+            if document.title == title:
+                if isinstance(document, EditableDocument):
+                    document.edit(new_content)
+                    return True
+                return False
+        return False
+
+    def bulk_edit(self, edits: dict[str, str]) -> dict[str, bool]:
+        # Edit multiple documents and return results
+        results = {}
+        for title, content in edits.items():
+            results[title] = self.edit_document(title, content)
+        return results
+
+    def get_editable_documents(self) -> list[EditableDocument]:
+        # Return all editable documents
+        return [doc for doc in self.document_list if isinstance(doc, EditableDocument)]
+
+    def get_readonly_documents(self) -> list[Document]:
+        # Return all read-only documents
+        return [doc for doc in self.document_list if not isinstance(doc, EditableDocument)]
+
+    def process_all_documents(self, processor: DocumentProcessor) -> dict[str, str]:
+        # Process all documents and return results
+        results = {}
+        for document in self.document_list:
+            results[document.title] = processor.process(document)
+        return results
+
+    def get_statistics(self) -> dict:
+        # Get library statistics
+        total_words = sum(doc.get_word_count() for doc in self.document_list)
+        editable_count = len(self.get_editable_documents())
+        readonly_count = len(self.get_readonly_documents())
+        
+        return {
+            "total_documents": len(self.document_list),
+            "editable_count": editable_count,
+            "readonly_count": readonly_count,
+            "total_words": total_words,
+            "average_words": total_words / len(self.document_list) if self.document_list else 0
+        }
 
 # ==========================================
 # TEST CASES
@@ -198,8 +246,7 @@ if __name__ == "__main__":
     pdf = PDFDocument("Report", "quarterly report data", 125.5)
     assert pdf.read() == "quarterly report data"
     assert pdf.get_file_size() == 125.5
-    assert not hasattr(pdf, 'edit'), "PDF should not have edit method"
-    assert not hasattr(pdf, 'append'), "PDF should not have append method"
+    assert isinstance(pdf, EditableDocument) == False, "PDF should not be EditableDocument"
     info = pdf.get_info()
     assert info["read_only"] == True
     assert info["file_size_kb"] == 125.5
@@ -261,128 +308,128 @@ if __name__ == "__main__":
     assert content == "content one"
     print("✓ Read document successfully")
 
-    # assert library.read_document("NonExistent") is None
-    # print("✓ Returns None for non-existent document")
+    assert library.read_document("NonExistent") is None
+    print("✓ Returns None for non-existent document")
 
-    # print("\n=== Test 10: DocumentLibrary - Safe Editing (LSP PATTERN!) ===")
-    # # Can edit EditableDocument
-    # assert library.edit_document("Doc2", "updated content") == True
-    # assert library.read_document("Doc2") == "updated content"
-    # print("✓ Successfully edited EditableDocument")
+    print("\n=== Test 10: DocumentLibrary - Safe Editing (LSP PATTERN!) ===")
+    # Can edit EditableDocument
+    assert library.edit_document("Doc2", "updated content") == True
+    assert library.read_document("Doc2") == "updated content"
+    print("✓ Successfully edited EditableDocument")
 
-    # # Cannot edit regular Document
-    # assert library.edit_document("Doc1", "new content") == False
-    # assert library.read_document("Doc1") == "content one"  # Unchanged
-    # print("✓ Correctly rejected editing regular Document")
+    # Cannot edit regular Document
+    assert library.edit_document("Doc1", "new content") == False
+    assert library.read_document("Doc1") == "content one"  # Unchanged
+    print("✓ Correctly rejected editing regular Document")
 
-    # # Cannot edit PDFDocument
-    # assert library.edit_document("PDF1", "hacked") == False
-    # assert library.read_document("PDF1") == "content three"  # Unchanged
-    # print("✓ Correctly rejected editing PDF")
+    # Cannot edit PDFDocument
+    assert library.edit_document("PDF1", "hacked") == False
+    assert library.read_document("PDF1") == "content three"  # Unchanged
+    print("✓ Correctly rejected editing PDF")
 
-    # print("\n=== Test 11: DocumentLibrary - Bulk Edit ===")
-    # library2 = DocumentLibrary()
-    # library2.add_document(EditableDocument("Edit1", "content"))
-    # library2.add_document(EditableDocument("Edit2", "content"))
-    # library2.add_document(Document("Regular", "content"))
-    # library2.add_document(PDFDocument("PDF", "content", 50.0))
+    print("\n=== Test 11: DocumentLibrary - Bulk Edit ===")
+    library2 = DocumentLibrary()
+    library2.add_document(EditableDocument("Edit1", "content"))
+    library2.add_document(EditableDocument("Edit2", "content"))
+    library2.add_document(Document("Regular", "content"))
+    library2.add_document(PDFDocument("PDF", "content", 50.0))
 
-    # results = library2.bulk_edit({
-    #     "Edit1": "new1",
-    #     "Edit2": "new2",
-    #     "Regular": "should fail",
-    #     "PDF": "should fail",
-    #     "NotFound": "should fail"
-    # })
+    results = library2.bulk_edit({
+        "Edit1": "new1",
+        "Edit2": "new2",
+        "Regular": "should fail",
+        "PDF": "should fail",
+        "NotFound": "should fail"
+    })
 
-    # assert results["Edit1"] == True
-    # assert results["Edit2"] == True
-    # assert results["Regular"] == False
-    # assert results["PDF"] == False
-    # assert results["NotFound"] == False
-    # print(f"✓ Bulk edit results: {results}")
+    assert results["Edit1"] == True
+    assert results["Edit2"] == True
+    assert results["Regular"] == False
+    assert results["PDF"] == False
+    assert results["NotFound"] == False
+    print(f"✓ Bulk edit results: {results}")
 
-    # print("\n=== Test 12: DocumentLibrary - Filtering by Type ===")
-    # editable_docs = library2.get_editable_documents()
-    # assert len(editable_docs) == 2
-    # assert all(isinstance(d, EditableDocument) for d in editable_docs)
-    # print(f"✓ Found {len(editable_docs)} editable documents")
+    print("\n=== Test 12: DocumentLibrary - Filtering by Type ===")
+    editable_docs = library2.get_editable_documents()
+    assert len(editable_docs) == 2
+    assert all(isinstance(d, EditableDocument) for d in editable_docs)
+    print(f"✓ Found {len(editable_docs)} editable documents")
 
-    # readonly_docs = library2.get_readonly_documents()
-    # assert len(readonly_docs) == 2  # Regular Document + PDFDocument
-    # assert all(not isinstance(d, EditableDocument) for d in readonly_docs)
-    # print(f"✓ Found {len(readonly_docs)} read-only documents")
+    readonly_docs = library2.get_readonly_documents()
+    assert len(readonly_docs) == 2  # Regular Document + PDFDocument
+    assert all(not isinstance(d, EditableDocument) for d in readonly_docs)
+    print(f"✓ Found {len(readonly_docs)} read-only documents")
 
-    # print("\n=== Test 13: DocumentLibrary - Process All (LSP DEMO!) ===")
-    # processor = DocumentProcessor(
-    #     lambda s: s.upper(),
-    #     lambda s: s[::-1]  # Reverse
-    # )
+    print("\n=== Test 13: DocumentLibrary - Process All (LSP DEMO!) ===")
+    processor = DocumentProcessor(
+        lambda s: s.upper(),
+        lambda s: s[::-1]  # Reverse
+    )
 
-    # results = library2.process_all_documents(processor)
-    # assert len(results) == 4
-    # assert results["Edit1"] == "1WEN"  # "new1" -> "NEW1" -> "1WEN"
-    # assert results["Edit2"] == "2WEN"
-    # print(f"✓ Processed all documents (both editable and read-only): {results}")
-    # print("  ^ This demonstrates LSP - processor works with ANY document type!")
+    results = library2.process_all_documents(processor)
+    assert len(results) == 4
+    assert results["Edit1"] == "1WEN"  # "new1" -> "NEW1" -> "1WEN"
+    assert results["Edit2"] == "2WEN"
+    print(f"✓ Processed all documents (both editable and read-only): {results}")
+    print("  ^ This demonstrates LSP - processor works with ANY document type!")
 
-    # print("\n=== Test 14: DocumentLibrary - Statistics ===")
-    # library3 = DocumentLibrary()
-    # library3.add_document(Document("D1", "one two three"))  # 3 words
-    # library3.add_document(EditableDocument("D2", "four five"))  # 2 words
-    # library3.add_document(PDFDocument("D3", "six", 50.0))  # 1 word
+    print("\n=== Test 14: DocumentLibrary - Statistics ===")
+    library3 = DocumentLibrary()
+    library3.add_document(Document("D1", "one two three"))  # 3 words
+    library3.add_document(EditableDocument("D2", "four five"))  # 2 words
+    library3.add_document(PDFDocument("D3", "six", 50.0))  # 1 word
 
-    # stats = library3.get_statistics()
-    # assert stats["total_documents"] == 3
-    # assert stats["editable_count"] == 1
-    # assert stats["readonly_count"] == 2
-    # assert stats["total_words"] == 6
-    # assert stats["average_words"] == 2.0
-    # print(f"✓ Statistics: {stats}")
+    stats = library3.get_statistics()
+    assert stats["total_documents"] == 3
+    assert stats["editable_count"] == 1
+    assert stats["readonly_count"] == 2
+    assert stats["total_words"] == 6
+    assert stats["average_words"] == 2.0
+    print(f"✓ Statistics: {stats}")
 
-    # print("\n=== Test 15: isinstance() Safety Checks ===")
-    # doc = Document("Test", "content")
-    # editable = EditableDocument("Test", "content")
-    # pdf = PDFDocument("Test", "content", 50.0)
+    print("\n=== Test 15: isinstance() Safety Checks ===")
+    doc = Document("Test", "content")
+    editable = EditableDocument("Test", "content")
+    pdf = PDFDocument("Test", "content", 50.0)
 
-    # assert isinstance(doc, Document)
-    # assert not isinstance(doc, EditableDocument)
+    assert isinstance(doc, Document)
+    assert not isinstance(doc, EditableDocument)
 
-    # assert isinstance(editable, Document)  # Inherits from Document
-    # assert isinstance(editable, EditableDocument)
+    assert isinstance(editable, Document)  # Inherits from Document
+    assert isinstance(editable, EditableDocument)
 
-    # assert isinstance(pdf, Document)  # Inherits from Document
-    # assert not isinstance(pdf, EditableDocument)
+    assert isinstance(pdf, Document)  # Inherits from Document
+    assert not isinstance(pdf, EditableDocument)
 
-    # print("✓ All isinstance() checks passed")
+    print("✓ All isinstance() checks passed")
 
-    # print("\n✓✓✓ All tests passed! ✓✓✓")
+    print("\n✓✓✓ All tests passed! ✓✓✓")
 
-    # print("\n" + "="*60)
-    # print("LSP KEY LESSONS")
-    # print("="*60)
-    # print("\n1. PART 1 (DocumentProcessor):")
-    # print("   - Like StackedDiscount: applies multiple transformers in sequence")
-    # print("   - Works with ANY Document type (LSP compliant)")
-    # print("   - Process: content -> transformer1 -> transformer2 -> result")
+    print("\n" + "="*60)
+    print("LSP KEY LESSONS")
+    print("="*60)
+    print("\n1. PART 1 (DocumentProcessor):")
+    print("   - Like StackedDiscount: applies multiple transformers in sequence")
+    print("   - Works with ANY Document type (LSP compliant)")
+    print("   - Process: content -> transformer1 -> transformer2 -> result")
 
-    # print("\n2. PART 2 (DocumentLibrary):")
-    # print("   - Manages mixed document types safely")
-    # print("   - Uses isinstance() to check capabilities before acting")
-    # print("   - edit_document: only edits if isinstance(EditableDocument)")
-    # print("   - process_all_documents: works with ALL types (LSP!)")
+    print("\n2. PART 2 (DocumentLibrary):")
+    print("   - Manages mixed document types safely")
+    print("   - Uses isinstance() to check capabilities before acting")
+    print("   - edit_document: only edits if isinstance(EditableDocument)")
+    print("   - process_all_documents: works with ALL types (LSP!)")
 
-    # print("\n3. LSP vs ABC:")
-    # print("   - ABC: 'Does child have required methods?' ✓")
-    # print("   - LSP: 'Does child BEHAVE correctly when substituted?' ✓")
-    # print("   - PDFDocument doesn't inherit edit() because it can't support it")
-    # print("   - This prevents LSP violations (no unexpected exceptions)")
+    print("\n3. LSP vs ABC:")
+    print("   - ABC: 'Does child have required methods?' ✓")
+    print("   - LSP: 'Does child BEHAVE correctly when substituted?' ✓")
+    print("   - PDFDocument doesn't inherit edit() because it can't support it")
+    print("   - This prevents LSP violations (no unexpected exceptions)")
 
-    # print("\n4. The Liskov Substitution Principle:")
-    # print("   'Objects of a superclass should be replaceable with objects")
-    # print("    of a subclass WITHOUT breaking the application'")
-    # print("   - DocumentProcessor.process() works with any Document")
-    # print("   - Library safely checks capabilities using isinstance()")
-    # print("   - No forced inheritance of unsupported methods")
+    print("\n4. The Liskov Substitution Principle:")
+    print("   'Objects of a superclass should be replaceable with objects")
+    print("    of a subclass WITHOUT breaking the application'")
+    print("   - DocumentProcessor.process() works with any Document")
+    print("   - Library safely checks capabilities using isinstance()")
+    print("   - No forced inheritance of unsupported methods")
 
-    # print("="*60)
+    print("="*60)
