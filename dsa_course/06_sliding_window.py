@@ -95,9 +95,6 @@ Examples:
   (subarray [12,-5,-6,50] has sum 51, average 51/4 = 12.75)
 - nums=[5], k=1 -> 5.0
 
-HINT: This is just "max sum of k elements" divided by k.
-      Use sliding window to find max sum, then divide.
-
 Implement the function below:
 """
 
@@ -122,18 +119,6 @@ Examples:
 - "abcabcbb" -> 3 (substring "abc")
 - "bbbbb" -> 1 (substring "b")
 - "pwwkew" -> 3 (substring "wke")
-
-HINT: Variable size sliding window.
-      - Use a SET to track characters in current window
-      - Expand window (move right pointer) to explore
-      - When duplicate found, shrink window (move left pointer)
-        until the duplicate is removed
-      - Track maximum window size seen
-
-      Think of it as:
-      - right pointer adds characters
-      - left pointer removes characters when there's a duplicate
-      - window = s[left:right+1]
 
 Implement the function below:
 """

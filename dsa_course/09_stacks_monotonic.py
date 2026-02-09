@@ -125,11 +125,6 @@ Examples:
   Remove "xx" -> "azzy"
   Remove "zz" -> "ay"
 
-HINT: Use a stack!
-      - For each character, if it equals stack top, pop (they cancel)
-      - Otherwise, push it
-      - At end, stack contains remaining characters
-
 Implement the function below:
 """
 
@@ -162,14 +157,6 @@ Examples:
   7 -> next greater is 12
   6 -> next greater is 12
   12 -> no greater element
-
-HINT: Process from RIGHT to LEFT, maintain stack of "candidates".
-      - Stack holds elements that could be "next greater" for future elements
-      - For current element, pop stack until we find something greater
-      - Whatever remains on top is our answer (or -1 if empty)
-      - Push current element for future use
-
-      The stack maintains elements in decreasing order (monotonic stack).
 
 Implement the function below:
 """
@@ -204,15 +191,6 @@ Examples:
 
 - [30, 20, 10] -> [0, 0, 0] (temperatures only decrease)
 
-HINT: This is a monotonic stack problem!
-      - Stack stores INDICES (not values) of days waiting for answer
-      - Process left to right
-      - When current temp > temp at stack top, we found the answer
-        for that day: days waited = current index - stored index
-      - Pop and record answer, then push current index
-
-      Stack maintains indices of decreasing temperatures.
-
 Implement the function below:
 """
 
@@ -245,11 +223,6 @@ Examples:
   Day 4 (60): 60 < 70, span = 1
   Day 5 (75): 75 > 60, 75 > 70, 75 > 60, 75 < 80. span = 4 (days 2,3,4,5)
   Day 6 (85): 85 > 75, 85 > 80, 85 < 100. span = 6 (days 1-6)
-
-HINT: Use a stack of (price, index) pairs.
-      - For each day, pop while stack top price <= current price
-      - Span = current_index - index_of_last_higher_price
-      - If stack empty, all previous days were lower -> span = i + 1
 
 Implement the function below:
 """

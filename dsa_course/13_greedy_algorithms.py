@@ -107,18 +107,6 @@ Examples:
 
 - [0] -> True (already at last index)
 
-HINT: Track the farthest index reachable.
-      For each position (if reachable), update farthest.
-      If farthest ever reaches or exceeds last index, return True.
-
-      max_reach = 0
-      for i in range(len(nums)):
-          if i > max_reach:
-              return False  # Can't reach this position
-          max_reach = max(max_reach, i + nums[i])
-          if max_reach >= len(nums) - 1:
-              return True
-
 Implement the function below:
 """
 
@@ -149,21 +137,6 @@ Examples:
 
 - [1,2,3] -> 2
   Jump 0->1, then 1->2
-
-HINT: Greedy BFS-style approach.
-      - Track current range [start, end] reachable with current jumps
-      - From current range, find farthest we can reach (next range end)
-      - When we need to go beyond current end, increment jumps
-
-      jumps = 0
-      current_end = 0
-      farthest = 0
-
-      for i in range(len(nums) - 1):  # Don't need to jump FROM last index
-          farthest = max(farthest, i + nums[i])
-          if i == current_end:  # Reached end of current jump's range
-              jumps += 1
-              current_end = farthest
 
 Implement the function below:
 """
@@ -201,26 +174,6 @@ Examples:
 - gas=[2,3,4], cost=[3,4,3] -> -1
   Total gas (9) < total cost (10), impossible
 
-HINT: Two key insights:
-      1. If total gas < total cost, impossible
-      2. If we fail at station j starting from i, then starting from
-         any station between i and j will also fail.
-         So try starting from j+1.
-
-      total = 0
-      tank = 0
-      start = 0
-
-      for i in range(len(gas)):
-          gain = gas[i] - cost[i]
-          total += gain
-          tank += gain
-          if tank < 0:  # Can't reach next station
-              start = i + 1  # Try starting from next station
-              tank = 0
-
-      return start if total >= 0 else -1
-
 Implement the function below:
 """
 
@@ -252,19 +205,6 @@ Examples:
 
 - tasks=["A","A","A","A","A","A","B","C","D","E","F","G"], n=2 -> 16
   A -> B -> C -> A -> D -> E -> A -> F -> G -> A -> idle -> idle -> A -> idle -> idle -> A
-
-HINT: Focus on the most frequent task.
-      If most frequent task appears 'max_count' times,
-      we need at least (max_count - 1) * (n + 1) + count_of_max_freq_tasks slots.
-
-      Example: A,A,A,B,B,B with n=2
-      max_count = 3 (both A and B appear 3 times)
-      Minimum frame: (3-1) * (2+1) = 6 slots for spacing
-      Plus count of tasks with max_count: 2
-      Total: 6 + 2 = 8
-
-      But if we have many different tasks, we might not need idle time.
-      So answer = max(calculated_minimum, len(tasks))
 
 Implement the function below:
 """

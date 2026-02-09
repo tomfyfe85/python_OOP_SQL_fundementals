@@ -163,18 +163,6 @@ Examples:
 - [1,2], n=1 -> [1] (remove last node)
 - [1,2], n=2 -> [2] (remove first node)
 
-HINT: Use two pointers with a gap of n nodes.
-      1. Move 'fast' pointer n steps ahead
-      2. Move both pointers until fast reaches end
-      3. 'slow' is now just before the node to delete
-      4. Use a dummy head to handle edge case of removing first node
-
-      dummy -> 1 -> 2 -> 3 -> 4 -> 5, n=2
-               slow           fast
-                    slow           fast
-                         slow           fast
-      Now slow.next (4) should be removed
-
 Implement the function below:
 """
 
@@ -199,25 +187,6 @@ Examples:
 - [1,2,4], [1,3,4] -> [1,1,2,3,4,4]
 - [], [0] -> [0]
 - [], [] -> []
-
-HINT: Use a dummy head and compare nodes one by one.
-
-      dummy -> ?
-      curr = dummy
-
-      while both lists have nodes:
-          if list1.val <= list2.val:
-              curr.next = list1
-              list1 = list1.next
-          else:
-              curr.next = list2
-              list2 = list2.next
-          curr = curr.next
-
-      # Attach remaining nodes
-      curr.next = list1 or list2
-
-      return dummy.next
 
 Implement the function below:
 """
@@ -248,15 +217,6 @@ Examples:
 - [1,2] with no cycle -> False
 - [1] with no cycle -> False
 
-HINT: Use Floyd's cycle detection (fast and slow pointers).
-      - Slow moves 1 step, fast moves 2 steps
-      - If there's a cycle, they will eventually meet
-      - If fast reaches None, there's no cycle
-
-      Why does this work?
-      In a cycle, fast gains 1 step on slow each iteration.
-      Eventually fast catches up to slow.
-
 Implement the function below:
 """
 
@@ -281,21 +241,6 @@ Examples:
 - [1,2,3,4,5] -> node with value 3
 - [1,2,3,4,5,6] -> node with value 4 (second middle)
 - [1] -> node with value 1
-
-HINT: Use slow and fast pointers.
-      - Slow moves 1 step, fast moves 2 steps
-      - When fast reaches end, slow is at middle
-
-      For odd length:  1 -> 2 -> 3 -> 4 -> 5
-                            s         f
-                                 s              f (at None)
-      Slow at 3 (middle)
-
-      For even length: 1 -> 2 -> 3 -> 4 -> 5 -> 6
-                            s         f
-                                 s              f
-                                      s              f (at None)
-      Slow at 4 (second middle)
 
 Implement the function below:
 """

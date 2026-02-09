@@ -96,13 +96,6 @@ Examples:
 - nums=[1,3,5,6], target=7 -> 4 (would insert at end)
 - nums=[1,3,5,6], target=0 -> 0 (would insert at beginning)
 
-HINT: This is binary search with a twist.
-      - If found, return the index
-      - If not found, `left` will be at the insertion point
-
-      Think about it: when we stop, left > right.
-      `left` is where the target should go.
-
 Implement the function below:
 """
 
@@ -129,15 +122,6 @@ Minimize the number of calls to is_bad_version.
 Examples:
 - n=5, bad=4 means versions [1,2,3] are good, [4,5] are bad -> return 4
 - n=1, bad=1 means version 1 is bad -> return 1
-
-HINT: Binary search! The versions are "sorted" in a sense:
-      [good, good, good, bad, bad, bad]
-
-      We want to find the first "bad" (the boundary).
-      - If mid is bad, first bad could be mid or earlier -> right = mid
-      - If mid is good, first bad is definitely later -> left = mid + 1
-
-      Note: Use right = mid (not mid-1) because mid could BE the first bad.
 
 Implement the function below:
 """

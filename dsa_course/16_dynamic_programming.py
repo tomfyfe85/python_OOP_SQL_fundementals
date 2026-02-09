@@ -118,14 +118,6 @@ Examples:
 - n=3 -> 3 ways: (1+1+1), (1+2), (2+1)
 - n=4 -> 5 ways: (1+1+1+1), (1+1+2), (1+2+1), (2+1+1), (2+2)
 
-HINT: This is Fibonacci in disguise!
-      To reach step n, you either:
-      - Came from step n-1 (1 step jump)
-      - Came from step n-2 (2 step jump)
-
-      dp[n] = dp[n-1] + dp[n-2]
-      Base: dp[1] = 1, dp[2] = 2
-
 Implement the function below:
 """
 
@@ -150,14 +142,6 @@ Examples:
 - [1,2,3,1] -> 4 (rob houses 0 and 2: 1+3=4)
 - [2,7,9,3,1] -> 12 (rob houses 0, 2, 4: 2+9+1=12)
 - [2,1,1,2] -> 4 (rob houses 0 and 3: 2+2=4)
-
-HINT: At each house, choose: rob it or skip it.
-      - If rob house i: can't rob i-1, add nums[i] to dp[i-2]
-      - If skip house i: take dp[i-1]
-
-      dp[i] = max(dp[i-1], dp[i-2] + nums[i])
-
-      Or think of it as: dp[i] = max money considering houses 0..i
 
 Implement the function below:
 """
@@ -184,17 +168,6 @@ Examples:
 - coins=[2], amount=3 -> -1 (impossible)
 - coins=[1], amount=0 -> 0
 
-HINT: For each amount, try each coin.
-      dp[amount] = min coins to make 'amount'
-
-      dp[0] = 0  # 0 coins to make 0
-      for a in range(1, amount + 1):
-          for coin in coins:
-              if coin <= a and dp[a - coin] != -1:
-                  dp[a] = min(dp[a], dp[a - coin] + 1)
-
-      Or: dp[a] = min(dp[a - coin] + 1) for all valid coins
-
 Implement the function below:
 """
 
@@ -218,16 +191,6 @@ Examples:
 - [10,9,2,5,3,7,101,18] -> 4 (subsequence [2,3,7,101] or [2,5,7,101])
 - [0,1,0,3,2,3] -> 4 (subsequence [0,1,2,3])
 - [7,7,7,7,7] -> 1 (all same, length 1)
-
-HINT (O(n^2) solution):
-      dp[i] = length of LIS ending at index i
-
-      For each i, look at all j < i:
-        if nums[j] < nums[i]:
-            dp[i] = max(dp[i], dp[j] + 1)
-
-      Base: dp[i] = 1 (each element is a subsequence of length 1)
-      Answer: max(dp)
 
 Note: There's also an O(n log n) solution using binary search,
 but the O(n^2) DP solution is easier to understand.
@@ -256,15 +219,6 @@ Examples:
 - m=3, n=7 -> 28
 - m=3, n=2 -> 3 (Right-Down-Down, Down-Right-Down, Down-Down-Right)
 - m=1, n=1 -> 1
-
-HINT: To reach cell (i, j), you came from (i-1, j) or (i, j-1).
-
-      dp[i][j] = dp[i-1][j] + dp[i][j-1]
-
-      Base: dp[0][j] = 1 (only one way to reach first row: go right)
-            dp[i][0] = 1 (only one way to reach first column: go down)
-
-      Space optimization: only need previous row, can use 1D array.
 
 Implement the function below:
 """

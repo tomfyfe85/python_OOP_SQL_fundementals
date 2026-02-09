@@ -112,15 +112,6 @@ Examples:
   Distances: 18, 26, 20
   Two closest: [3,3] and [-2,4]
 
-HINT: Use a MAX-HEAP of size k (negate distances for max behavior).
-      Keep the k smallest distances.
-
-      for point in points:
-          dist = x*x + y*y
-          heapq.heappush(heap, (-dist, point))  # Negate for max-heap
-          if len(heap) > k:
-              heapq.heappop(heap)  # Remove farthest
-
 Implement the function below:
 """
 
@@ -148,12 +139,6 @@ Examples:
 
 - nums=[1], k=1 -> [1]
 
-HINT: Two steps:
-      1. Count frequencies using a dictionary
-      2. Use a min-heap of size k to keep top k frequencies
-
-      Or use heapq.nlargest with key=frequency
-
 Implement the function below:
 """
 
@@ -179,16 +164,6 @@ Examples:
 - lists=[] -> []
 
 - lists=[[]] -> []
-
-HINT: Use a min-heap to always get the smallest element across all lists.
-
-      1. Push first element of each list into heap: (value, list_index, node)
-      2. Pop smallest, add to result
-      3. If popped node has next, push next node
-      4. Repeat until heap is empty
-
-      Note: Python heapq compares tuples element by element.
-            Include list_index to break ties (avoid comparing nodes).
 
 For this exercise, we'll use simple lists instead of linked lists.
 Implement the function below:
@@ -218,24 +193,6 @@ Median: middle value in sorted list. If even count, average of two middle values
 Examples:
 - add_num(1), add_num(2), find_median() -> 1.5
 - add_num(3), find_median() -> 2.0
-
-HINT: Use TWO heaps!
-      - max_heap: stores smaller half (use negation for max behavior)
-      - min_heap: stores larger half
-
-      Invariants:
-      1. All elements in max_heap <= all elements in min_heap
-      2. Sizes differ by at most 1
-      3. max_heap has equal or one more element
-
-      Adding a number:
-      1. Add to max_heap
-      2. Move max of max_heap to min_heap
-      3. If min_heap larger, move min back to max_heap
-
-      Finding median:
-      - If same size: average of both tops
-      - Otherwise: top of max_heap
 
 Implement the class below:
 """

@@ -142,27 +142,6 @@ Examples:
     ["0","0","0","1","1"]
   ] -> 3 islands
 
-HINT: For each unvisited land cell, run DFS/BFS to mark all connected
-      land cells as visited. Count how many times we start a new search.
-
-      def numIslands(grid):
-          count = 0
-          for i in range(rows):
-              for j in range(cols):
-                  if grid[i][j] == '1':
-                      dfs(grid, i, j)  # Mark entire island
-                      count += 1
-          return count
-
-      def dfs(grid, i, j):
-          if out of bounds or grid[i][j] != '1':
-              return
-          grid[i][j] = '0'  # Mark visited
-          dfs(grid, i+1, j)
-          dfs(grid, i-1, j)
-          dfs(grid, i, j+1)
-          dfs(grid, i, j-1)
-
 Implement the function below:
 """
 
@@ -192,24 +171,6 @@ Example:
 
     Input: node 1
     Output: deep copy of entire graph
-
-HINT: Use BFS or DFS with a hashmap to track cloned nodes.
-
-      def cloneGraph(node):
-          if not node:
-              return None
-          cloned = {node: Node(node.val)}
-          queue = deque([node])
-
-          while queue:
-              curr = queue.popleft()
-              for neighbor in curr.neighbors:
-                  if neighbor not in cloned:
-                      cloned[neighbor] = Node(neighbor.val)
-                      queue.append(neighbor)
-                  cloned[curr].neighbors.append(cloned[neighbor])
-
-          return cloned[node]
 
 Implement the function below:
 """
@@ -244,25 +205,6 @@ Examples:
 - graph = {0: [1], 1: [0], 2: [3], 3: [2]}
   start=0, end=3 -> -1 (disconnected)
 
-HINT: BFS gives shortest path in unweighted graphs!
-      Track distance as you go:
-
-      def shortestPath(graph, start, end):
-          if start == end:
-              return 0
-          visited = {start}
-          queue = deque([(start, 0)])  # (node, distance)
-
-          while queue:
-              node, dist = queue.popleft()
-              for neighbor in graph.get(node, []):
-                  if neighbor == end:
-                      return dist + 1
-                  if neighbor not in visited:
-                      visited.add(neighbor)
-                      queue.append((neighbor, dist + 1))
-          return -1
-
 Implement the function below:
 """
 
@@ -289,30 +231,6 @@ Examples:
 
 - graph = {0: [1], 1: [0, 2], 2: [1]}
   -> False (it's a line: 0-1-2)
-
-HINT: DFS with parent tracking.
-      A cycle exists if we visit a node that's already visited
-      AND it's not our parent (direct back edge doesn't count).
-
-      def hasCycle(graph):
-          visited = set()
-
-          def dfs(node, parent):
-              visited.add(node)
-              for neighbor in graph.get(node, []):
-                  if neighbor not in visited:
-                      if dfs(neighbor, node):
-                          return True
-                  elif neighbor != parent:  # Visited but not parent = cycle
-                      return True
-              return False
-
-          # Check all components
-          for node in graph:
-              if node not in visited:
-                  if dfs(node, -1):
-                      return True
-          return False
 
 Implement the function below:
 """
@@ -343,19 +261,6 @@ Examples:
 
 - n=4, edges=[] -> 4
   Each node is its own component
-
-HINT: Build adjacency list, then count DFS/BFS starts.
-
-      graph = build_adjacency_list(n, edges)
-      visited = set()
-      count = 0
-
-      for node in range(n):
-          if node not in visited:
-              dfs(graph, node, visited)
-              count += 1
-
-      return count
 
 Implement the function below:
 """

@@ -66,18 +66,6 @@ def cyclic_rotation_solution(A, K):
     dq.rotate(K)
     # print(list(dq))
     return list(dq)
-  
-
-
-
-
-
-
-
-
-
-
-
 
 
 # def cyclic_rotation_solution(A, K):
@@ -356,6 +344,137 @@ def max_profit_solution(A):
         min_price = min(min_price, price)
 
     return max_profit
+
+
+# ============================================
+# MATH & LOGIC PROBLEMS
+# ============================================
+# These require recognizing mathematical constraints
+# rather than applying algorithm patterns.
+
+
+# --------------------------------------------
+# MATH 1: Largest Square from Two Sticks
+# Difficulty: Medium | Type: Binary Search on Answer
+# --------------------------------------------
+
+"""
+PROBLEM: Given two stick lengths A and B, find the largest square side
+you can make by cutting exactly 4 pieces of equal length.
+
+Key insight: You need A // S + B // S >= 4
+
+Examples:
+- A=21, B=10 -> 7 (21//7=3 pieces, 10//7=1 piece, total=4)
+- A=14, B=10 -> 5 (14//5=2 pieces, 10//5=2 pieces, total=4)
+  Note: (14+10)//4 = 6, but 14//6 + 10//6 = 2+1 = 3 (not enough!)
+"""
+
+
+def largest_square_template(A, B):
+    """Try implementing this yourself first!"""
+    pass
+
+
+def largest_square_solution(A, B):
+    # Binary search for largest valid side length
+    lo, hi = 1, (A + B) // 4
+
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if A // mid + B // mid >= 4:
+            lo = mid
+        else:
+            hi = mid - 1
+
+    return lo
+
+
+# --------------------------------------------
+# MATH 2: Largest Square Tile (GCD)
+# Difficulty: Easy | Type: Number Theory
+# --------------------------------------------
+
+"""
+PROBLEM: Given a rectangle A x B, find the largest square tile
+that can perfectly cover it with no gaps or overlaps.
+
+Key insight: The answer is GCD(A, B)
+
+Examples:
+- A=6, B=4 -> 2 (can tile with 2x2 squares)
+- A=12, B=8 -> 4 (can tile with 4x4 squares)
+- A=7, B=3 -> 1 (coprime, only 1x1 works)
+"""
+
+
+def largest_tile_template(A, B):
+    """Try implementing this yourself first!"""
+    pass
+
+
+def largest_tile_solution(A, B):
+    # Euclidean algorithm for GCD
+    while B:
+        A, B = B, A % B
+    return A
+
+
+# --------------------------------------------
+# MATH 3: Chocolate Bar Division
+# Difficulty: Easy | Type: Divisibility
+# --------------------------------------------
+
+"""
+PROBLEM: A chocolate bar has N x M squares. You can only break
+along a full row or column. How many breaks to get individual squares?
+
+Key insight: Each break increases piece count by 1.
+Start with 1 piece, need N*M pieces, so need N*M - 1 breaks.
+
+Examples:
+- N=3, M=4 -> 11 breaks (to get 12 individual squares)
+- N=1, M=5 -> 4 breaks
+"""
+
+
+def chocolate_breaks_template(N, M):
+    """Try implementing this yourself first!"""
+    pass
+
+
+def chocolate_breaks_solution(N, M):
+    return N * M - 1
+
+
+# --------------------------------------------
+# MATH 4: Min Perimeter Rectangle
+# Difficulty: Easy | Type: Optimization
+# --------------------------------------------
+
+"""
+PROBLEM: Given area N, find the minimum perimeter of a rectangle
+with integer sides.
+
+Key insight: Perimeter is minimized when sides are closest to sqrt(N).
+Find the largest divisor <= sqrt(N).
+
+Examples:
+- N=30 -> 22 (5x6 rectangle, perimeter = 2*(5+6) = 22)
+- N=36 -> 24 (6x6 square)
+"""
+
+
+def min_perimeter_template(N):
+    """Try implementing this yourself first!"""
+    pass
+
+
+def min_perimeter_solution(N):
+    import math
+    for i in range(int(math.sqrt(N)), 0, -1):
+        if N % i == 0:
+            return 2 * (i + N // i)
 
 
 # ============================================

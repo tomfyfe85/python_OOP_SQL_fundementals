@@ -83,9 +83,6 @@ Examples:
 - [5] -> None (only one element)
 - [3, 3, 3, 2] -> 2 (largest is 3, second is 2)
 
-HINT: Track TWO values while iterating: largest AND second largest.
-      Think about when to update each one.
-
 Implement the function below:
 """
 
@@ -118,13 +115,6 @@ Examples:
 - [10, 10, 10] -> 0 (average is 10, nothing is greater)
 - [1, 100] -> 1 (average is 50.5, only 100 is greater)
 
-HINT: You need to iterate TWICE:
-      1. First pass: calculate the average
-      2. Second pass: count elements > average
-
-This is a common pattern: sometimes you need info from the whole
-array before you can process individual elements.
-
 Implement the function below:
 """
 
@@ -152,22 +142,6 @@ Examples:
 - [0] -> [0]
 - [1, 2, 3] -> [1, 2, 3] (no zeros, unchanged)
 - [0, 0, 1] -> [1, 0, 0]
-
-HINT: Use a "write pointer" that tracks where the next non-zero should go.
-
-      Iterate through the array:
-      - When you find a non-zero, write it at the write pointer position
-      - Increment the write pointer
-      - After the loop, fill remaining positions with zeros
-
-      Example walkthrough for [0, 1, 0, 3, 12]:
-      write_pos = 0
-      - See 0: skip
-      - See 1: write to pos 0, write_pos = 1 -> [1, 1, 0, 3, 12]
-      - See 0: skip
-      - See 3: write to pos 1, write_pos = 2 -> [1, 3, 0, 3, 12]
-      - See 12: write to pos 2, write_pos = 3 -> [1, 3, 12, 3, 12]
-      - Fill rest with zeros -> [1, 3, 12, 0, 0]
 
 Implement the function below:
 """

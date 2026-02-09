@@ -133,13 +133,6 @@ Examples:
 - 1 -> 2 -> 3 -> 4 -> 2 (back to 2) -> Has cycle
 - 1 -> 2 -> 3 -> 4 -> None -> No cycle
 
-HINT: Use fast and slow pointers.
-      - If fast reaches None -> no cycle
-      - If fast equals slow at some point -> cycle exists
-
-      Start both at head. Move slow by 1, fast by 2.
-      Keep going until fast is None OR slow == fast.
-
 Implement the function below:
 """
 
@@ -166,15 +159,6 @@ Examples:
 - 19 -> 1^2 + 9^2 = 82 -> 8^2 + 2^2 = 68 -> 6^2 + 8^2 = 100
        -> 1^2 + 0^2 + 0^2 = 1 -> HAPPY!
 - 2 -> 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20 -> 4 -> CYCLE, not happy
-
-HINT: This is cycle detection in disguise!
-      - The "linked list" is the sequence of numbers
-      - "next node" is the sum of squares of digits
-      - Use fast and slow pointers on this sequence
-      - If they meet at 1 -> happy
-      - If they meet elsewhere -> cycle, not happy
-
-      First, write a helper function to compute sum of squares of digits.
 
 Implement the function below:
 """

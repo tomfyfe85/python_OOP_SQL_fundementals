@@ -122,17 +122,6 @@ Examples:
 - "a" -> "a"
 - "" -> ""
 
-HINT: Think about it this way:
-      reverse("hello") = reverse("ello") + "h"
-                       = reverse("llo") + "e" + "h"
-                       = reverse("lo") + "l" + "e" + "h"
-                       = reverse("o") + "l" + "l" + "e" + "h"
-                       = "o" + "l" + "l" + "e" + "h"
-                       = "olleh"
-
-      Base case: empty string or single character
-      Recursive case: reverse the rest, then add first character at end
-
 Implement the function below:
 """
 
@@ -161,17 +150,6 @@ Examples:
 - power(2, -2) -> 0.25 (1/4)
 - power(5, 1) -> 5
 
-HINT:
-      Base case: n == 0 -> return 1
-      Recursive case: x * power(x, n-1)
-      Handle negative: if n < 0, return 1 / power(x, -n)
-
-BONUS (optional): Can you make it faster?
-      x^8 = (x^4)^2 = ((x^2)^2)^2
-      Instead of 8 multiplications, only 3!
-      If n is even: power(x, n) = power(x*x, n//2)
-      If n is odd: power(x, n) = x * power(x, n-1)
-
 Implement the function below:
 """
 
@@ -197,21 +175,6 @@ Examples:
 - [0] -> [[], [0]]
 - [] -> [[]]
 
-HINT: For each element, we have a choice: include it or don't include it.
-      This creates a binary decision tree.
-
-      Backtracking approach:
-      - Start with empty subset
-      - For each position, try including the element, recurse, then exclude
-      - Base case: processed all elements -> save current subset
-
-      def backtrack(start, current):
-          result.append(current[:])  # save a copy
-          for i in range(start, len(nums)):
-              current.append(nums[i])    # include
-              backtrack(i + 1, current)  # recurse
-              current.pop()              # exclude (backtrack)
-
 Implement the function below:
 """
 
@@ -235,33 +198,6 @@ Examples:
 - [1, 2, 3] -> [[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]]
 - [0, 1] -> [[0,1], [1,0]]
 - [1] -> [[1]]
-
-HINT: At each position, try every remaining unused number.
-
-      Use a "used" set or swap elements in place:
-
-      Approach 1 (with used set):
-      def backtrack(current):
-          if len(current) == len(nums):
-              result.append(current[:])
-              return
-          for num in nums:
-              if num not in used:
-                  used.add(num)
-                  current.append(num)
-                  backtrack(current)
-                  current.pop()
-                  used.remove(num)
-
-      Approach 2 (swapping):
-      def backtrack(start):
-          if start == len(nums):
-              result.append(nums[:])
-              return
-          for i in range(start, len(nums)):
-              nums[start], nums[i] = nums[i], nums[start]  # swap
-              backtrack(start + 1)
-              nums[start], nums[i] = nums[i], nums[start]  # swap back
 
 Implement the function below:
 """
@@ -289,22 +225,6 @@ Examples:
   2+2+3=7, 7=7
 - candidates=[2,3,5], target=8 -> [[2,2,2,2], [2,3,3], [3,5]]
 - candidates=[2], target=1 -> [] (no way to make 1)
-
-HINT: Similar to subsets, but:
-      - Track remaining sum needed
-      - Can reuse same element (start from same index, not i+1)
-      - Prune: skip if adding element exceeds target
-
-      def backtrack(start, current, remaining):
-          if remaining == 0:
-              result.append(current[:])
-              return
-          if remaining < 0:
-              return
-          for i in range(start, len(candidates)):
-              current.append(candidates[i])
-              backtrack(i, current, remaining - candidates[i])  # i, not i+1
-              current.pop()
 
 Implement the function below:
 """

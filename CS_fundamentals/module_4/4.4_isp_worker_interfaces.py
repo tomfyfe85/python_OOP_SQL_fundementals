@@ -290,13 +290,23 @@ from abc import ABC, abstractmethod
 # ==========================================
 
 # PART 1: Define the interfaces (ABCs)
+class Printable (ABC):
+    @abstractmethod
+    def print_document(self, document: str) -> str:
+        """Accepts a document and prints it"""
+        pass
 
-
-
-
-# PART 2: Implement the devices
-
-
+class Scannable(ABC):
+    @abstractmethod
+    def scan_document(self) -> str:
+        """scans documents returns scanning message"""
+        pass
+    
+class Faxable(ABC):
+    @abstractmethod
+    def fax_document(self, document:str, number:str) -> str:
+        """Accepts a document and a fax no. Returns confirmation message"""
+        pass
 
 
 # PART 3: Office class

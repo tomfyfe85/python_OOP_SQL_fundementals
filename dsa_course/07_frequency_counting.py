@@ -103,13 +103,6 @@ Examples:
   Index 1: "ba" is anagram of "ab"
   Index 2: "ab" is anagram of "ab"
 
-HINT: Combine sliding window with frequency counting!
-      - Window size = len(p)
-      - Slide through s, comparing window frequency to p frequency
-      - When frequencies match, record the start index
-
-      You can use Counter and compare, or manually track counts.
-
 Implement the function below:
 """
 
@@ -134,9 +127,6 @@ You may assume the majority element always exists.
 Examples:
 - [3, 2, 3] -> 3 (appears 2 times, n/2 = 1.5, 2 > 1.5)
 - [2, 2, 1, 1, 1, 2, 2] -> 2 (appears 4 times, n/2 = 3.5, 4 > 3.5)
-
-HINT: Count frequencies, then find which one has count > n/2.
-      Or use Counter and find the most common element.
 
 Implement the function below:
 """

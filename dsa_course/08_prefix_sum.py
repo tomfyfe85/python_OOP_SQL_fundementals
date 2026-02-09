@@ -92,9 +92,6 @@ Examples:
 
 - [1, 1, 1, 1, 1] -> [1, 2, 3, 4, 5]
 
-HINT: This is literally building a prefix sum array!
-      Each element = previous running sum + current element
-
 Implement the function below:
 """
 
@@ -121,19 +118,6 @@ Examples:
 
 - nums=[1,2,3], k=3 -> 2
   Subarrays: [1,2] and [3]
-
-HINT: This combines prefix sum with hash map!
-
-Key insight: If prefix[j] - prefix[i] = k, then subarray i..j-1 sums to k
-Rearranged: prefix[i] = prefix[j] - k
-
-So for each position j:
-- Calculate current prefix sum
-- Check how many times (current_sum - k) appeared before
-- That's how many subarrays ending at j sum to k!
-
-Use a hash map to count occurrences of each prefix sum.
-Initialize with {0: 1} because empty prefix has sum 0.
 
 Implement the function below:
 """

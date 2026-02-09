@@ -88,12 +88,6 @@ Examples:
 - ["h","e","l","l","o"] -> ["o","l","l","e","h"]
 - ["H","a","n","n","a","h"] -> ["h","a","n","n","a","H"]
 
-HINT: Use two pointers from opposite ends.
-      Swap characters at left and right positions.
-      Move pointers toward center.
-
-      To swap in Python: a, b = b, a
-
 Implement the function below:
 """
 
@@ -121,11 +115,6 @@ Examples:
 - numbers=[2,7,11,15], target=9 -> [1, 2] (2+7=9)
 - numbers=[2,3,4], target=6 -> [1, 3] (2+4=6)
 - numbers=[-1,0], target=-1 -> [1, 2] (-1+0=-1)
-
-HINT: Since array is sorted, use two pointers from opposite ends.
-      - If sum too small: move left pointer right (increase sum)
-      - If sum too big: move right pointer left (decrease sum)
-      - If sum equals target: found it!
 
 NOTE: Return 1-indexed (add 1 to your indices)
 

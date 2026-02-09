@@ -192,15 +192,6 @@ Examples:
 - [1,null,2] -> 2
 - [] -> 0
 
-HINT: Recursive approach:
-      - Base: null node has depth 0
-      - Recursive: depth = 1 + max(left_depth, right_depth)
-
-      def maxDepth(root):
-          if not root:
-              return 0
-          return 1 + max(maxDepth(root.left), maxDepth(root.right))
-
 Implement the function below:
 """
 
@@ -228,19 +219,6 @@ Examples:
 - [4,2,7,1,3,6,9] -> [4,7,2,9,6,3,1]
 - [2,1,3] -> [2,3,1]
 - [] -> []
-
-HINT: Recursive approach:
-      - Swap left and right children
-      - Recursively invert left subtree
-      - Recursively invert right subtree
-
-      def invertTree(root):
-          if not root:
-              return None
-          root.left, root.right = root.right, root.left
-          invertTree(root.left)
-          invertTree(root.right)
-          return root
 
 Implement the function below:
 """
@@ -275,18 +253,6 @@ Examples:
 
 - [1,2,3], target=5 -> False
 
-HINT: Recursive approach, subtract from target as you go:
-      - If leaf and remaining == node.val: found path!
-      - Else recurse on children with reduced target
-
-      def hasPathSum(root, target):
-          if not root:
-              return False
-          if not root.left and not root.right:  # Leaf
-              return target == root.val
-          remaining = target - root.val
-          return hasPathSum(root.left, remaining) or hasPathSum(root.right, remaining)
-
 Implement the function below:
 """
 
@@ -318,21 +284,6 @@ Examples:
 
   LCA(5, 1) = 3
   LCA(5, 4) = 5 (5 is ancestor of 4, and ancestor of itself)
-
-HINT: Recursive approach:
-      - If root is None or root is p or q: return root
-      - Recursively find LCA in left and right subtrees
-      - If both return non-null: root is LCA
-      - If only one returns non-null: that's the LCA
-
-      def lowestCommonAncestor(root, p, q):
-          if not root or root == p or root == q:
-              return root
-          left = lowestCommonAncestor(root.left, p, q)
-          right = lowestCommonAncestor(root.right, p, q)
-          if left and right:
-              return root
-          return left if left else right
 
 Implement the function below:
 """
@@ -366,19 +317,6 @@ Examples:
   1   4
      / \
     3   6   -> False (3 is in right subtree of 5 but 3 < 5)
-
-HINT: Pass valid range (min, max) down the tree:
-      - Root: (-inf, inf)
-      - Go left: update max to current value
-      - Go right: update min to current value
-
-      def isValidBST(root, min_val=-inf, max_val=inf):
-          if not root:
-              return True
-          if root.val <= min_val or root.val >= max_val:
-              return False
-          return (isValidBST(root.left, min_val, root.val) and
-                  isValidBST(root.right, root.val, max_val))
 
 Implement the function below:
 """

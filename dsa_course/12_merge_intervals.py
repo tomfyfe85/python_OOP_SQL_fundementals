@@ -114,17 +114,6 @@ Examples:
 
 - intervals=[], newInterval=[5,7] -> [[5,7]]
 
-HINT: Process in three phases:
-      1. Add all intervals that end BEFORE new interval starts
-      2. Merge all overlapping intervals with new interval
-      3. Add all intervals that start AFTER new interval ends
-
-      Phase 2 (merging):
-      while i < n and intervals[i][0] <= newInterval[1]:
-          newInterval[0] = min(newInterval[0], intervals[i][0])
-          newInterval[1] = max(newInterval[1], intervals[i][1])
-          i += 1
-
 Implement the function below:
 """
 
@@ -154,12 +143,6 @@ Examples:
 
 - [[1,5],[5,10]] -> True
   End of first = start of second is OK (not overlapping)
-
-HINT: Sort by start time, then check if any meeting starts before previous ends.
-
-      for i in range(1, len(intervals)):
-          if intervals[i][0] < intervals[i-1][1]:
-              return False  # Overlap!
 
 Implement the function below:
 """
@@ -197,19 +180,6 @@ Examples:
 - [[1,4],[2,5],[3,6]] -> 3
   All three overlap at time 3, need 3 rooms.
 
-HINT: Think of it as counting maximum concurrent meetings.
-      Use "sweep line" technique:
-      1. Create events: +1 for start, -1 for end
-      2. Sort events (if same time, process ends before starts)
-      3. Sweep through, track running count
-      4. Maximum count = rooms needed
-
-      Alternative: Use a min-heap of end times
-      - For each meeting, if it can use an existing room (heap top <= start),
-        pop that room and push new end time
-      - Otherwise, add a new room (push end time)
-      - Heap size = rooms needed
-
 Implement the function below:
 """
 
@@ -239,23 +209,6 @@ Examples:
   [5,10] ∩ [1,5] = [5,5]
   [5,10] ∩ [8,12] = [8,10]
   etc.
-
-HINT: Use two pointers, one for each list.
-
-      Intersection exists if: max(start1, start2) <= min(end1, end2)
-      If so, intersection = [max(starts), min(ends)]
-
-      After processing, advance the pointer for whichever interval ends first.
-
-      while i < len(first) and j < len(second):
-          lo = max(first[i][0], second[j][0])
-          hi = min(first[i][1], second[j][1])
-          if lo <= hi:
-              result.append([lo, hi])
-          if first[i][1] < second[j][1]:
-              i += 1
-          else:
-              j += 1
 
 Implement the function below:
 """

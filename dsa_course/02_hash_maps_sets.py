@@ -79,11 +79,6 @@ Examples:
 - [1, 2, 3, 4] -> False (all distinct)
 - [1, 1, 1, 3, 3, 4, 3, 2, 4, 2] -> True (many duplicates)
 
-HINT: Use a set to track what you've seen.
-      If you try to add something already in the set, it's a duplicate.
-
-      OR: Compare len(nums) with len(set(nums))
-
 Implement the function below:
 """
 
@@ -112,10 +107,6 @@ Examples:
 - "leetcode" -> 0 (l appears only once, it's at index 0)
 - "loveleetcode" -> 2 (v appears only once, it's at index 2)
 - "aabb" -> -1 (all characters repeat)
-
-HINT: Two-pass approach:
-      1. First pass: count frequency of each character (use dict)
-      2. Second pass: find first char with count == 1
 
 Implement the function below:
 """
@@ -147,22 +138,28 @@ Examples:
 - nums=[3, 2, 4], target=6 -> [1, 2] (2+4=6)
 - nums=[3, 3], target=6 -> [0, 1] (3+3=6)
 
-HINT: For each number, calculate its complement (target - num).
-      Check if the complement was seen before using a dict.
-      Store {value: index} as you go.
-
-      Brute force: Check every pair - O(n^2)
-      Hash map: For each num, check if (target - num) exists - O(n)
-
 Implement the function below:
 """
 
 
 def two_sum(nums: list[int], target: int) -> list[int]:
     """Find two numbers that add up to target. Return their indices."""
-    # YOUR CODE HERE
-    pass
+    from collections import Counter
 
+    int_count = Counter(nums)
+    hash_map = {v: k for k, v in enumerate(nums) }
+    final = []
+
+    for i, num in enumerate(nums):
+        diff = target - num
+
+        if diff in hash_map.keys():
+              if diff == target/2 and int_count.get(num) == 1:
+                  continue
+              
+              final.append(i)
+              final.append(hash_map[diff])
+              return final
 
 # ============================================
 # REVISION: Quick Review from Module 1
@@ -197,7 +194,7 @@ if __name__ == "__main__":
     print("\n--- Example: Find Intersection ---")
     assert find_intersection_example([1, 2, 2, 1], [2, 2]) == [2]
     assert find_intersection_example([4, 9, 5], [9, 4, 9, 8, 4]) == [4, 9] or \
-           find_intersection_example([4, 9, 5], [9, 4, 9, 8, 4]) == [9, 4]
+            find_intersection_example([4, 9, 5], [9, 4, 9, 8, 4]) == [9, 4]
     print("Example tests passed!")
 
     # Test Question 1

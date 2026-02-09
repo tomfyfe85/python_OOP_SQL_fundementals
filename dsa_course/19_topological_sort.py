@@ -175,11 +175,6 @@ Examples:
 - numCourses=3, prerequisites=[[1,0],[2,1]] -> True
   Take 0 -> 1 -> 2
 
-HINT: This is cycle detection in a directed graph.
-      If we can do topological sort (process all nodes), no cycle exists.
-
-      Use Kahn's algorithm: if result length < numCourses, there's a cycle.
-
 Implement the function below:
 """
 
@@ -204,9 +199,6 @@ Examples:
 - numCourses=2, prerequisites=[[1,0]] -> [0,1]
 - numCourses=4, prerequisites=[[1,0],[2,0],[3,1],[3,2]] -> [0,1,2,3] or [0,2,1,3]
 - numCourses=1, prerequisites=[] -> [0]
-
-HINT: Just run topological sort!
-      Return the ordering if valid, empty array if cycle detected.
 
 Implement the function below:
 """
@@ -243,15 +235,6 @@ Examples:
 - words = ["z","x","z"]
   -> "" (invalid: z before x, but z after x too)
 
-HINT: Build a graph from adjacent word comparisons.
-      Compare adjacent words, find first differing char.
-      That gives us an edge: char1 -> char2 (char1 comes before char2).
-
-      Then run topological sort on the character graph.
-
-      Edge case: if word1 is prefix of word2 but longer, invalid!
-      Example: ["abc", "ab"] is invalid.
-
 Implement the function below:
 """
 
@@ -280,19 +263,6 @@ Examples:
 
 - n=3, relations=[[1,2],[2,3],[3,1]]
   -> -1 (cycle)
-
-HINT: This is "longest path" in a DAG, or BFS with level counting.
-
-      Modified Kahn's algorithm:
-      - Process all in-degree 0 nodes as one semester
-      - Count semesters until all processed
-
-      semesters = 0
-      while queue:
-          semesters += 1
-          for each node in current batch:
-              process and update in-degrees
-              add new in-degree 0 nodes
 
 Implement the function below:
 """

@@ -133,12 +133,6 @@ Examples:
     trie.insert("app")
     trie.search("app")     # returns True
 
-HINT: Follow the structure shown in the example.
-      - Each node has children dict and is_end flag
-      - Insert: create nodes as needed, mark end
-      - Search: traverse, check is_end at final node
-      - StartsWith: traverse, check if node exists
-
 Implement the class below:
 """
 
@@ -186,28 +180,6 @@ Examples:
   words = ["abcb"]
   -> [] (can't reuse cells)
 
-HINT: Build a Trie from the word list, then DFS from each cell.
-
-      1. Insert all words into Trie
-      2. For each cell, run DFS using Trie to prune invalid paths
-      3. If we reach a word ending, add to results
-
-      def dfs(i, j, node, path):
-          char = board[i][j]
-          if char not in node.children:
-              return
-
-          child = node.children[char]
-          path += char
-
-          if child.is_end:
-              result.add(path)
-
-          board[i][j] = '#'  # Mark visited
-          for di, dj in [(0,1),(0,-1),(1,0),(-1,0)]:
-              dfs(i+di, j+dj, child, path)
-          board[i][j] = char  # Restore
-
 Implement the function below:
 """
 
@@ -236,27 +208,6 @@ Examples:
     wd.search("bad")  # True
     wd.search(".ad")  # True (matches bad, dad, mad)
     wd.search("b..")  # True (matches bad)
-
-HINT: Use a Trie, but handle '.' by trying all children.
-
-      def search(word):
-          def dfs(node, i):
-              if i == len(word):
-                  return node.is_end
-
-              char = word[i]
-              if char == '.':
-                  # Try all children
-                  for child in node.children.values():
-                      if dfs(child, i + 1):
-                          return True
-                  return False
-              else:
-                  if char not in node.children:
-                      return False
-                  return dfs(node.children[char], i + 1)
-
-          return dfs(self.root, 0)
 
 Implement the class below:
 """
@@ -297,15 +248,6 @@ Examples:
 - words = ["a","banana","app","appl","ap","apply","apple"] -> "apple"
   Build: a -> ap -> app -> appl -> apple
   "apply" is same length but "apple" < "apply" lexicographically
-
-HINT: Insert all words into Trie, then BFS/DFS to find longest buildable word.
-
-      A word is "buildable" if every prefix is also a word (is_end = True).
-
-      Sort words by length, then alphabetically.
-      For each word, check if all prefixes exist.
-
-      Or use Trie: DFS only following nodes where is_end = True.
 
 Implement the function below:
 """

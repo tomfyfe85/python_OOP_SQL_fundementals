@@ -122,25 +122,6 @@ Examples:
 - [5,4,3,2,1] -> [1,2,3,4,5]
 - [] -> []
 
-HINT: Implement partition function first.
-      Common strategies: pivot = last element, first element, or random.
-
-      def partition(nums, low, high):
-          pivot = nums[high]
-          i = low  # Index of smaller element
-          for j in range(low, high):
-              if nums[j] < pivot:
-                  nums[i], nums[j] = nums[j], nums[i]
-                  i += 1
-          nums[i], nums[high] = nums[high], nums[i]
-          return i
-
-      def quicksort(nums, low, high):
-          if low < high:
-              pi = partition(nums, low, high)
-              quicksort(nums, low, pi - 1)
-              quicksort(nums, pi + 1, high)
-
 Implement the function below (modify array in-place):
 """
 
@@ -168,16 +149,6 @@ Examples:
 - [1, 2, 3, 4, 5] -> 0 inversions (already sorted)
 
 - [5, 4, 3, 2, 1] -> 10 inversions (reverse sorted = maximum inversions)
-
-HINT: Modified merge sort!
-      During merge, when we take from right array, all remaining
-      elements in left array form inversions with it.
-
-      Normal merge: just merge
-      Counting merge: when right[j] < left[i], add (len(left) - i) to count
-
-      Why? At that moment, left[i:] are all > right[j], and all have
-      smaller indices (they're in the left half).
 
 Implement the function below:
 """
@@ -207,19 +178,6 @@ Examples:
 
 - nums1=[0,0], nums2=[0,0] -> 0.0
 
-HINT: Binary search on partition position.
-      We need to find a partition where:
-      - Left half contains (m+n+1)//2 elements
-      - All left elements <= all right elements
-
-      Binary search on smaller array for efficiency.
-      For each partition of nums1, calculate corresponding partition of nums2.
-
-      This is a hard problem! Here's the key insight:
-      - partitionX elements from nums1 go to left half
-      - partitionY = (m+n+1)//2 - partitionX elements from nums2 go to left
-      - Valid if: maxLeftX <= minRightY and maxLeftY <= minRightX
-
 Implement the function below:
 """
 
@@ -246,30 +204,6 @@ Examples:
 
 Note: Kadane's algorithm (O(n)) is better for this problem,
 but D&C approach is O(n log n) and good for learning.
-
-HINT: Divide array at midpoint. Maximum subarray is either:
-      1. Entirely in left half
-      2. Entirely in right half
-      3. Crossing the midpoint
-
-      For case 3: find max sum from mid going left + max sum from mid going right.
-
-      def max_crossing_sum(nums, low, mid, high):
-          # Max sum going left from mid
-          left_sum = float('-inf')
-          total = 0
-          for i in range(mid, low - 1, -1):
-              total += nums[i]
-              left_sum = max(left_sum, total)
-
-          # Max sum going right from mid+1
-          right_sum = float('-inf')
-          total = 0
-          for i in range(mid + 1, high + 1):
-              total += nums[i]
-              right_sum = max(right_sum, total)
-
-          return left_sum + right_sum
 
 Implement the function below:
 """
