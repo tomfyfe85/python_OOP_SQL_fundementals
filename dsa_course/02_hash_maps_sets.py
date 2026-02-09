@@ -177,8 +177,12 @@ Example: [3, 1, 4, 1, 5] -> 1
 
 def revision_find_min(nums: list[int]) -> int:
     """Return the minimum element in the array."""
-    # YOUR CODE HERE
-    pass
+    
+    min_val = nums[0]
+    for num in nums:
+        if num < min_val:
+            min_val = num
+    return min_val
 
 
 # ============================================
