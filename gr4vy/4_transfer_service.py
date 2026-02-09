@@ -11,7 +11,7 @@ Think of it as the "bank" that:
 3. Validates transfers
 4. Coordinates moving money from A to B
 
-WHY USE A DICTIONARY?
+WHY USE A DICTIONARY? dfd
 
 Accounts need to be found by ID quickly:
 - List: O(n) - must search through all accounts

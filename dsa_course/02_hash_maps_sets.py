@@ -166,7 +166,7 @@ def two_sum(nums: list[int], target: int) -> list[int]:
 # ============================================
 
 """
-REVISION: Find the minimum element in an array.
+REVISION: Find the minimum element in an array.s
 
 This is a quick refresher on array iteration from Module 1.
 Solve it WITHOUT using Python's built-in min() function.

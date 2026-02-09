@@ -1,34 +1,12 @@
 {
-    "editor.tokenColorCustomizations": {
-        "textMateRules": [
-            {
-                "scope": "string",
-                "settings": {
-                    "foreground": "#22C55E"
-                }
-            },
-            {
-                "scope": "meta.structure.dictionary.key.python",
-                "settings": {
-                    "foreground": "#22C55E"
-                }
-            },
-            {
-                "scope": "meta.structure.dictionary.value.python string",
-                "settings": {
-                    "foreground": "#22C55E"
-                }
-            }
-        ]
+  "workbench.colorCustomizations": {
+    "[Dark Space]": {
+      "editor.background": "#16161E"
     },
-    "workbench.colorCustomizations": {
-      "[Dark Space]": {
-        "editor.background": "#16161E"
-      },
-      "gitDecoration.modifiedResourceForeground": "#F9E79F",
-      "gitDecoration.untrackedResourceForeground": "#F9E79F"
-    },
-    "pylint.args": [
-        "--disable=W0105"
-    ]
+    "gitDecoration.modifiedResourceForeground": "#F9E79F",
+    "gitDecoration.untrackedResourceForeground": "#F9E79F",
+    "gitDecoration.addedResourceForeground": "#F9E79F",
+    "gitDecoration.stageModifiedResourceForeground": "#F9E79F"
+  },
+  "pylint.args": ["--disable=W0105"]
 }
