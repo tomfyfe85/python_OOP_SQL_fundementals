@@ -94,8 +94,25 @@ Implement the function below:
 
 def reverse_string(s: list[str]) -> None:
     """Reverse the list in-place. Return nothing."""
-    # YOUR CODE HERE
-    pass
+    import math
+    half_length = math.floor(len(s)/2) - 1
+    reverse_count = -1
+    count = 0
+    
+    for _ in s:
+        if count <= half_length:
+            p1 = s[count]
+            p2 = s[reverse_count]
+
+            s[reverse_count] = p1
+            s[count] = p2
+
+            count += 1
+            reverse_count -= 1
+        
+
+
+
 
 
 # ============================================
@@ -112,7 +129,7 @@ Given a 1-indexed sorted array and a target, return the indices
 of two numbers that add up to target. (Return 1-indexed!)
 
 Examples:
-- numbers=[2,7,11,15], target=9 -> [1, 2] (2+7=9)
+- numbers=[1,2,3,4,7,11,15], target=9 -> [1, 2] (2+7=9)
 - numbers=[2,3,4], target=6 -> [1, 3] (2+4=6)
 - numbers=[-1,0], target=-1 -> [1, 2] (-1+0=-1)
 
@@ -124,8 +141,22 @@ Implement the function below:
 
 def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
     """Return 1-indexed positions of two numbers that sum to target."""
-    # YOUR CODE HERE
-    pass
+    count = 0
+    reverse_count = -1
+    length = len(numbers)
+
+    for _ in numbers:
+        p1 = numbers[count]
+        p2 = numbers[reverse_count]
+
+        if p1 + p2 == target:
+            return list([count + 1, (length - abs(reverse_count)) + 1])
+        
+        if p1 + p2 > target:
+            reverse_count -= 1
+        else:
+            count += 1
+        
 
 
 # ============================================
