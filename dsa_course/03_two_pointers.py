@@ -174,10 +174,13 @@ Example: nums={2, 7, 11, 15}, target=9 -> True (2+7=9)
 
 def revision_two_sum(nums: set[int], target: int) -> bool:
     """Return True if any two numbers in the set sum to target."""
-    # YOUR CODE HERE
-    pass
-
-
+    seen = set()
+    for num in nums:
+        diff = target - num
+        if diff in seen:
+            return True
+        seen.add(num)
+    return False
 # ============================================
 # TEST CASES - Run to verify your solutions
 # ============================================

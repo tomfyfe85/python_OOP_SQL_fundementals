@@ -4,151 +4,133 @@ DSA Course - Module 4: Fast & Slow Pointers (Floyd's Tortoise & Hare)
 
 CONCEPT: Fast and Slow Pointers
 -------------------------------
-Two pointers moving at different speeds through a sequence.
+Two pointers moving at different speeds through a SEQUENCE.
 Typically: slow moves 1 step, fast moves 2 steps.
 
 THE KEY INSIGHT:
 If there's a cycle, fast will eventually "lap" slow and they'll meet.
 If there's no cycle, fast will reach the end.
 
-MAIN USE CASES:
-
-1. CYCLE DETECTION
-   - Fast moves 2x speed of slow
-   - If they meet -> cycle exists
-   - If fast reaches end -> no cycle
-
-2. FINDING MIDDLE
-   - When fast reaches end, slow is at middle
-   - Because slow traveled half the distance
-
-3. FINDING CYCLE START
-   - After detecting cycle, reset one pointer to start
-   - Move both at same speed -> they meet at cycle start
+IMPORTANT: This pattern works on ANY sequence, not just linked lists.
+A "sequence" is anything where you can compute the next value from the current one:
+- Repeatedly applying a math function to a number
+- Following indices in an array
+- Traversing nodes in a linked list (covered in Module 5)
 
 WHY IT WORKS (intuition, no math needed):
 - Think of two runners on a circular track
 - The faster one will eventually catch up to the slower one
 - They must meet if the track loops back
+
+MAIN USE CASES:
+1. CYCLE DETECTION - Do we ever revisit the same state?
+2. FINDING CYCLE START - Where does the loop begin?
+3. FINDING MIDDLE - When fast reaches end, slow is at middle
 """
 
 
 # ============================================
-# LINKED LIST NODE (we need this for examples)
+# EXAMPLE: Cycle Detection in a Number Sequence
 # ============================================
 
-class ListNode:
-    """Simple linked list node."""
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
-def create_linked_list(values: list) -> ListNode:
-    """Helper: Create linked list from list of values."""
-    if not values:
-        return None
-    head = ListNode(values[0])
-    current = head
-    for val in values[1:]:
-        current.next = ListNode(val)
-        current = current.next
-    return head
-
-
-def linked_list_to_list(head: ListNode) -> list:
-    """Helper: Convert linked list back to list."""
-    result = []
-    while head:
-        result.append(head.val)
-        head = head.next
-    return result
-
-
-# ============================================
-# EXAMPLE: Find Middle of Linked List
-# ============================================
-
-def find_middle_example(head: ListNode) -> ListNode:
+def example_detect_cycle():
     """
-    Find the middle node of a linked list.
-    If two middles, return the second one.
+    Demonstrate cycle detection using the digit-square-sum sequence.
 
-    Strategy:
-    - slow moves 1 step at a time
-    - fast moves 2 steps at a time
-    - When fast reaches end, slow is at middle
+    Take any number and repeatedly replace it with the sum of squares of its digits:
+        19 -> 1² + 9² = 82 -> 8² + 2² = 68 -> 6² + 8² = 100 -> 1 -> 1 -> 1 (reaches 1, stays there)
+        2  -> 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20 -> 4 (CYCLE! 4 appeared before)
 
-    Why? Fast travels 2x distance. When fast finishes,
-    slow has traveled exactly half = middle.
+    We can detect whether this sequence cycles back on itself using fast/slow pointers,
+    WITHOUT storing every number we've seen.
     """
-    if not head:
-        return None
 
-    slow = head
-    fast = head
+    def next_val(n):
+        """Compute sum of squares of digits."""
+        total = 0
+        while n > 0:
+            digit = n % 10
+            total += digit * digit
+            n //= 10
+        return total
 
-    while fast and fast.next:
-        slow = slow.next        # Move 1 step
-        fast = fast.next.next   # Move 2 steps
+    # Let's trace with n = 2
+    print("Tracing sequence starting from 2:")
+    val = 2
+    for _ in range(12):
+        print(f"  {val} -> ", end="")
+        val = next_val(val)
+    print(f"{val} ...")
 
-    return slow
+    # Now let's use fast/slow pointers to detect the cycle
+    print("\nFast/slow pointer detection starting from 2:")
+    slow = 2
+    fast = 2
+    step = 0
+
+    while True:
+        slow = next_val(slow)          # 1 step
+        fast = next_val(next_val(fast)) # 2 steps
+        step += 1
+        print(f"  Step {step}: slow={slow}, fast={fast}")
+        if slow == fast:
+            print(f"  -> They met at {slow}! Cycle detected.")
+            break
+
+    # Now trace starting from 19 (which reaches 1)
+    print("\nTracing sequence starting from 19:")
+    val = 19
+    for _ in range(8):
+        print(f"  {val} -> ", end="")
+        val = next_val(val)
+    print(f"{val} ...")
+    print("  -> Reaches 1 and stays at 1 (a fixed point, not a harmful cycle)")
 
 
-# Let's trace through: 1 -> 2 -> 3 -> 4 -> 5
-#
-# Start: slow=1, fast=1
-# Step 1: slow=2, fast=3
-# Step 2: slow=3, fast=5
-# Step 3: fast.next is None, stop
-# Return slow (node with value 3) - THE MIDDLE!
-#
-# For even length: 1 -> 2 -> 3 -> 4
-# Start: slow=1, fast=1
-# Step 1: slow=2, fast=3
-# Step 2: slow=3, fast=None (fast.next.next)
-# Actually: fast=3, fast.next=4, fast.next.next=None
-# So after step 2: slow=3, fast=None? Let's retrace...
-#
-# Start: slow=1, fast=1
-# Check: fast(1) exists, fast.next(2) exists -> continue
-# Step 1: slow=2, fast=3
-# Check: fast(3) exists, fast.next(4) exists -> continue
-# Step 2: slow=3, fast=None (went past end)
-# Check: fast is None -> stop
-# Return slow (node 3) - second of two middles
+example_detect_cycle()
 
 
 # ============================================
-# QUESTION 1: Linked List Cycle Detection
+# QUESTION 1: Sequence Cycle Detection
 # ============================================
 
 """
-PROBLEM: Detect if a linked list has a cycle.
+PROBLEM: Detect if applying a function repeatedly creates a cycle.
 
-A cycle means some node's next pointer points back to a previous node,
-creating an infinite loop.
+Given a starting value and a function f, the sequence is:
+    x, f(x), f(f(x)), f(f(f(x))), ...
+
+Use fast and slow pointers to determine:
+- Does the sequence reach a target value, OR
+- Does it enter a cycle (revisiting a value without hitting the target)?
+
+Return True if the sequence reaches the target, False if it cycles without reaching it.
 
 Examples:
-- 1 -> 2 -> 3 -> 4 -> 2 (back to 2) -> Has cycle
-- 1 -> 2 -> 3 -> 4 -> None -> No cycle
+    start=19, f=digit_square_sum, target=1 -> True  (19 -> 82 -> 68 -> ... -> 1)
+    start=2,  f=digit_square_sum, target=1 -> False (2 -> 4 -> 16 -> ... -> 4 CYCLE)
+    start=5,  f=digit_square_sum, target=1 -> False (5 -> 25 -> 29 -> ... cycles)
 
-Implement the function below:
+Hint: How do you handle the case where the target IS part of a cycle (like 1 -> 1 -> 1)?
+      If slow or fast ever equals the target, return True immediately.
 """
 
 
-def has_cycle(head: ListNode) -> bool:
-    """Return True if linked list has a cycle, False otherwise."""
+def reaches_target(start: int, f, target: int) -> bool:
+    """
+    Return True if repeatedly applying f(x) starting from start eventually reaches target.
+    Return False if the sequence enters a cycle without reaching target.
+    """
     # YOUR CODE HERE
     pass
 
 
 # ============================================
-# QUESTION 2: Happy Number
+# QUESTION 2 (CAPSTONE): Happy Number - LeetCode #202
 # ============================================
 
 """
-PROBLEM: Determine if a number is "happy".
+PROBLEM: Determine if a number is "happy".  (LeetCode #202)
 
 A happy number is defined by this process:
 1. Start with any positive integer
@@ -156,19 +138,21 @@ A happy number is defined by this process:
 3. Repeat until you get 1 (happy!) or enter an endless cycle (not happy)
 
 Examples:
-- 19 -> 1^2 + 9^2 = 82 -> 8^2 + 2^2 = 68 -> 6^2 + 8^2 = 100
-       -> 1^2 + 0^2 + 0^2 = 1 -> HAPPY!
+- 19 -> 1² + 9² = 82 -> 8² + 2² = 68 -> 6² + 8² = 100
+       -> 1² + 0² + 0² = 1 -> HAPPY!
 - 2 -> 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20 -> 4 -> CYCLE, not happy
 
-Implement the function below:
+You could solve this with a set (store seen numbers), but the fast/slow pointer
+approach uses O(1) space — no extra storage needed.
+
+Implement using fast and slow pointers:
 """
 
 
 def is_happy(n: int) -> bool:
     """Return True if n is a happy number, False otherwise."""
     # YOUR CODE HERE
-    # Hint: You might want a helper function like:
-    # def get_next(num): return sum of squares of digits
+    # Hint: You'll need a helper to compute the next number in the sequence.
     pass
 
 
@@ -196,49 +180,26 @@ def revision_is_palindrome(s: str) -> bool:
 # ============================================
 
 if __name__ == "__main__":
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("MODULE 4: Fast & Slow Pointers")
     print("=" * 60)
 
-    # Test Example
-    print("\n--- Example: Find Middle ---")
-    list1 = create_linked_list([1, 2, 3, 4, 5])
-    assert find_middle_example(list1).val == 3
-
-    list2 = create_linked_list([1, 2, 3, 4, 5, 6])
-    assert find_middle_example(list2).val == 4  # Second middle
-
-    list3 = create_linked_list([1])
-    assert find_middle_example(list3).val == 1
-    print("Example tests passed!")
-
     # Test Question 1
-    print("\n--- Question 1: Linked List Cycle ---")
+    print("\n--- Question 1: Sequence Cycle Detection ---")
     try:
-        # Create list with cycle: 1 -> 2 -> 3 -> 4 -> back to 2
-        head1 = ListNode(1)
-        head1.next = ListNode(2)
-        head1.next.next = ListNode(3)
-        head1.next.next.next = ListNode(4)
-        head1.next.next.next.next = head1.next  # Cycle to node 2
+        def digit_square_sum(n):
+            total = 0
+            while n > 0:
+                digit = n % 10
+                total += digit * digit
+                n //= 10
+            return total
 
-        assert has_cycle(head1) == True, "Should detect cycle"
-
-        # Create list without cycle
-        head2 = create_linked_list([1, 2, 3, 4])
-        assert has_cycle(head2) == False, "No cycle"
-
-        # Empty list
-        assert has_cycle(None) == False, "Empty list"
-
-        # Single node, no cycle
-        head3 = ListNode(1)
-        assert has_cycle(head3) == False, "Single node, no cycle"
-
-        # Single node with self-loop
-        head4 = ListNode(1)
-        head4.next = head4
-        assert has_cycle(head4) == True, "Self loop"
+        assert reaches_target(19, digit_square_sum, 1) == True, "19 reaches 1"
+        assert reaches_target(2, digit_square_sum, 1) == False, "2 cycles, never reaches 1"
+        assert reaches_target(7, digit_square_sum, 1) == True, "7 reaches 1"
+        assert reaches_target(4, digit_square_sum, 1) == False, "4 cycles"
+        assert reaches_target(1, digit_square_sum, 1) == True, "1 is already the target"
 
         print("All Question 1 tests PASSED!")
     except AssertionError as e:
@@ -246,15 +207,14 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Question 1 ERROR: {e}")
 
-    # Test Question 2
-    print("\n--- Question 2: Happy Number ---")
+    # Test Question 2 (Capstone)
+    print("\n--- Question 2 (Capstone): Happy Number - LeetCode #202 ---")
     try:
         assert is_happy(19) == True, "19 is happy"
         assert is_happy(2) == False, "2 is not happy"
         assert is_happy(1) == True, "1 is happy"
         assert is_happy(7) == True, "7 is happy"
         assert is_happy(4) == False, "4 is not happy"
-        # Edge cases
         assert is_happy(100) == True, "100 -> 1"
         assert is_happy(10) == True, "10 is happy"
         print("All Question 2 tests PASSED!")
@@ -270,6 +230,8 @@ if __name__ == "__main__":
     try:
         assert revision_is_palindrome("racecar") == True
         assert revision_is_palindrome("hello") == False
+        assert revision_is_palindrome("a") == True
+        assert revision_is_palindrome("") == True
         print("Revision PASSED!")
     except AssertionError as e:
         print(f"Revision FAILED: {e}")
@@ -281,8 +243,9 @@ if __name__ == "__main__":
     print("=" * 60)
     print("""
 1. Fast & slow pointers: slow moves 1 step, fast moves 2 steps
-2. Finding middle: when fast ends, slow is at middle
-3. Cycle detection: if they meet, there's a cycle
-4. Any sequence that might loop can use this pattern!
-5. Happy Number shows this pattern isn't just for linked lists
+2. Cycle detection: if they meet, the sequence loops
+3. This works on ANY sequence — numbers, arrays, linked lists
+4. Happy Number: classic application without linked lists
+5. O(1) space: no need to store every value you've seen
+6. In Module 5 (Linked Lists), we'll revisit this pattern on nodes!
 """)
