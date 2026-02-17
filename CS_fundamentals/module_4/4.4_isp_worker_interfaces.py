@@ -127,151 +127,6 @@ THE ISP CHALLENGE:
 
 ---
 
-PART 1: Define the Interfaces (ABC classes)
-
-Create THREE separate abstract base classes:
-
-1. Printable (ABC)
-    - @abstractmethod print_document(document: str) -> str
-
-2. Scannable (ABC)
-    - @abstractmethod scan_document() -> str
-
-3. Faxable (ABC)
-    - @abstractmethod fax_document(document: str, number: str) -> str
-
----
-
-PART 2: Implement the Devices
-
-1. SimplePrinter (implements Printable only)
-    - print_document(document) -> f"Printing: {document}"
-
-2. SimpleScanner (implements Scannable only)
-    - scan_document() -> "Scanned document content"
-
-3. AllInOnePrinter (implements Printable, Scannable, Faxable)
-    - print_document(document) -> f"[All-in-One] Printing: {document}"
-    - scan_document() -> "[All-in-One] Scanned document content"
-    - fax_document(document, number) -> f"[All-in-One] Faxing '{document}' to {number}"
-
-4. ModernPrinter (implements Printable, Scannable but NOT Faxable)
-    - print_document(document) -> f"[Modern] Printing: {document}"
-    - scan_document() -> "[Modern] Scanned document content"
-    - No fax capability (fax is outdated!)
-
----
-
-PART 3: Office class that works with interfaces (MEDIUM DIFFICULTY)
-
-Class: Office
-
-Attributes:
-- devices: list - stores all devices
-
-Methods:
-- __init__(): Initialize empty devices list
-
-- add_device(device) -> None:
-  Add any device to the office
-
-- print_to_all(document: str) -> list[str]:
-  Print document to ALL devices that can print
-  Use isinstance(device, Printable) to check
-  Return list of results from each printer
-
-- scan_from_any() -> str | None:
-  Find FIRST device that can scan and use it
-  Use isinstance(device, Scannable) to check
-  Return scanned content, or None if no scanner available
-
-- get_fax_machines() -> list:
-  Return list of all devices that can fax
-  Use isinstance(device, Faxable) to check
-
-- get_device_capabilities(device) -> list[str]:
-  Return list of capability names for a device
-  Check isinstance for each interface
-  Return something like ["print", "scan"] or ["print", "scan", "fax"]
-
----
-
-PART 4: PrintJobManager (HARD - Beyond Office)
-
-Create a print job manager that queues and processes jobs based on device capabilities.
-
-Class: PrintJobManager
-
-Attributes:
-- devices: list - available devices
-- job_queue: list - pending jobs (each job is a dict)
-
-Methods:
-- __init__(): Initialize empty devices list and job_queue
-
-- add_device(device) -> None:
-  Add a device to the manager
-
-- submit_job(job_type: str, content: str, **kwargs) -> int:
-  Add a job to the queue
-  job_type is one of: "print", "scan", "fax"
-  For fax jobs, kwargs will include "number" (the fax number)
-  Return the job_id (position in queue, starting at 0)
-  Store job as dict: {"id": int, "type": str, "content": str, "status": "pending", ...}
-  Include any kwargs in the job dict (e.g., "number" for fax)
-
-- process_next_job() -> dict:
-  Process the first pending job in the queue
-  Find a device that can handle the job type (use isinstance)
-  If device found:
-    - Execute the job (call appropriate method on device)
-    - Update job status to "completed"
-    - Add "result" key with the return value from the device
-    - Add "device" key with device class name
-  If no capable device:
-    - Update job status to "failed"
-    - Add "error" key with message "No capable device available"
-  Return the job dict
-
-- process_all_jobs() -> list[dict]:
-  Process all pending jobs
-  Return list of all job dicts (with updated statuses)
-
-- get_job_status(job_id: int) -> dict | None:
-  Return the job dict for given job_id, or None if not found
-
-- get_pending_jobs() -> list[dict]:
-  Return list of all jobs with status "pending"
-
-- get_completed_jobs() -> list[dict]:
-  Return list of all jobs with status "completed"
-
-- get_failed_jobs() -> list[dict]:
-  Return list of all jobs with status "failed"
-
-- get_statistics() -> dict:
-  Return:
-  {
-    "total_jobs": int,
-    "pending": int,
-    "completed": int,
-    "failed": int,
-    "jobs_by_type": {"print": int, "scan": int, "fax": int}
-  }
-
-THE HARD CHALLENGES:
-1. Matching job types to device capabilities using isinstance()
-2. Managing job state transitions (pending -> completed/failed)
-3. Handling jobs that can't be processed (no capable device)
-4. Processing jobs in queue order
-5. Tracking statistics across job types and statuses
-
-This is harder than Office because:
-- Office: Check capabilities and call methods directly
-- PrintJobManager: Queue jobs, match to devices, track state, handle failures
-
----
-
 LEARNING OBJECTIVES:
 
 1. Understand why fat interfaces are problematic
@@ -285,11 +140,6 @@ ESTIMATED TIME: 30-45 minutes
 
 from abc import ABC, abstractmethod
 
-# ==========================================
-# YOUR CODE GOES BELOW
-# ==========================================
-
-# PART 1: Define the interfaces (ABCs)
 class Printable (ABC):
     @abstractmethod
     def print_document(self, document: str) -> str:
@@ -308,10 +158,89 @@ class Faxable(ABC):
         """Accepts a document and a fax no. Returns confirmation message"""
         pass
 
+class SimplePrinter(Printable):
+    def print_document(self, document):
+        return f"Printing: {document}"
 
-# PART 3: Office class
+class SimpleScanner(Scannable):
+    def scan_document(self):
+        return "Scanned document content"
 
+class AllInOnePrinter(Printable, Scannable, Faxable):
+    def print_document(self, document):
+        return f"[All-in-One] Printing: {document}"
 
+    def scan_document(self):
+        return "[All-in-One] Scanned document content"
+    
+    def fax_document(self, document, number):
+        return f"[All-in-One] Faxing '{document}' to {number}"
+
+class ModernPrinter(Printable, Scannable):
+    def print_document(self, document):
+      return f"[Modern] Printing: {document}"
+    
+    def scan_document(self):
+      return f"[Modern] Scanned document content"
+    
+
+# Part 3
+class Office():
+    def __init__(self):
+        self.devices_list = []
+
+    def add_device(self, device) -> None:
+        self.devices_list.append(device)
+
+    def print_to_all(self, document: str) -> list[str]:
+        document_list = []
+        for device in self.devices_list:
+            if isinstance(device, Printable):
+                document_list.append(device.print_document(document))
+        return document_list
+    
+    def scan_from_any(self) -> str | None:
+        for device in self.devices_list:
+            if isinstance(device, Scannable):
+                return device.scan_document()
+        return None
+
+    def get_fax_machines(self) -> list:
+        devices_that_fax = []
+        for device in self.devices_list:
+            if isinstance(device, Faxable):
+                devices_that_fax.append(device)
+        return devices_that_fax
+
+    def get_device_capabilities(self, device) -> list[str]:
+        device_capabilities = []
+        if isinstance(device, Faxable):
+            device_capabilities.append("fax")
+        if isinstance(device, Scannable):
+            device_capabilities.append("scan")
+        if isinstance(device, Printable):
+            device_capabilities.append("print")
+        return device_capabilities
+
+class PrintJobManager():
+    def __init__(self):
+        self.devices_list = []
+        self.job_queue_list = []
+
+    def add_device(self, device):
+        self.device_list = []
+
+    def submit_job(self, job_type: str, content:str, **kwargs) -> int:
+        job = {"id": len(self.job_queue_list - 1),
+                'type': job_type, "content": content,
+              "status": "pending"}
+        if kwargs:
+            for key ,value in kwargs.items():
+                job[key] = value
+              
+        self.job_queue_list.append(job)
+
+        return job['id']
 
 
 # ==========================================

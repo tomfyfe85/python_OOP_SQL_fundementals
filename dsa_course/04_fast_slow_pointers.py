@@ -139,7 +139,7 @@ A happy number is defined by this process:
 
 Examples:
 - 19 -> 1² + 9² = 82 -> 8² + 2² = 68 -> 6² + 8² = 100
-       -> 1² + 0² + 0² = 1 -> HAPPY!
+      -> 1² + 0² + 0² = 1 -> HAPPY!
 - 2 -> 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20 -> 4 -> CYCLE, not happy
 
 You could solve this with a set (store seen numbers), but the fast/slow pointer
