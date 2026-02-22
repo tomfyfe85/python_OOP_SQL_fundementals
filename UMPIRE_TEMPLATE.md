@@ -1,33 +1,63 @@
-PART 3: Office class that works with interfaces (MEDIUM DIFFICULTY)
 
-Class: Office
+PART 4: PrintJobManager (HARD - Beyond Office)
+
+Create a print job manager that queues and processes jobs based on device capabilities.
+
+Class: PrintJobManager
 
 Attributes:
-
-- devices: list - stores all devices
+- devices: list - available devices
+- job_queue: list - pending jobs (each job is a dict)
 
 Methods:
+- __init__(): Initialize empty devices list and job_queue
 
-- **init**(): Initialize empty devices list
+- process_next_job() -> dict:
+  Process the first pending job in the queue
+  Find a device that can handle the job type (use isinstance)
+  If device found:
+    - Execute the job (call appropriate method on device)
+    - Update job status to "completed"
+    - Add "result" key with the return value from the device
+    - Add "device" key with device class name
+  If no capable device:
+    - Update job status to "failed"
+    - Add "error" key with message "No capable device available"
+  Return the job dict
 
-- add_device(device) -> None:
-  Add any device to the office
+- process_all_jobs() -> list[dict]:
+  Process all pending jobs
+  Return list of all job dicts (with updated statuses)
 
-- print_to_all(document: str) -> list[str]:
-  Print document to ALL devices that can print
-  Use isinstance(device, Printable) to check
-  Return list of results from each printer
+- get_job_status(job_id: int) -> dict | None:
+  Return the job dict for given job_id, or None if not found
 
-- scan_from_any() -> str | None:
-  Find FIRST device that can scan and use it
-  Use isinstance(device, Scannable) to check
-  Return scanned content, or None if no scanner available
+- get_pending_jobs() -> list[dict]:
+  Return list of all jobs with status "pending"
 
-- get_fax_machines() -> list:
-  Return list of all devices that can fax
-  Use isinstance(device, Faxable) to check
+- get_completed_jobs() -> list[dict]:
+  Return list of all jobs with status "completed"
 
-- get_device_capabilities(device) -> list[str]:
-  Return list of capability names for a device
-  Check isinstance for each interface
-  Return something like ["print", "scan"] or ["print", "scan", "fax"]
+- get_failed_jobs() -> list[dict]:
+  Return list of all jobs with status "failed"
+
+- get_statistics() -> dict:
+  Return:
+  {
+    "total_jobs": int,
+    "pending": int,
+    "completed": int,
+    "failed": int,
+    "jobs_by_type": {"print": int, "scan": int, "fax": int}
+  }
+
+THE HARD CHALLENGES:
+1. Matching job types to device capabilities using isinstance()
+2. Managing job state transitions (pending -> completed/failed)
+3. Handling jobs that can't be processed (no capable device)
+4. Processing jobs in queue order
+5. Tracking statistics across job types and statuses
+
+This is harder than Office because:
+- Office: Check capabilities and call methods directly
+- PrintJobManager: Queue jobs, match to devices, track state, handle failures

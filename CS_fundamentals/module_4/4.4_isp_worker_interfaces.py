@@ -213,14 +213,12 @@ class Office():
         return devices_that_fax
 
     def get_device_capabilities(self, device) -> list[str]:
-        device_capabilities = []
-        if isinstance(device, Faxable):
-            device_capabilities.append("fax")
-        if isinstance(device, Scannable):
-            device_capabilities.append("scan")
-        if isinstance(device, Printable):
-            device_capabilities.append("print")
-        return device_capabilities
+        capabilities = {
+            Faxable: 'fax',
+            Printable: 'print',
+            Scannable: 'scan'
+        }
+        return [name for capability, name in capabilities.items() if isinstance(device, capability)]
 
 class PrintJobManager():
     def __init__(self):
@@ -234,12 +232,12 @@ class PrintJobManager():
         job = {"id": len(self.job_queue_list - 1),
                 'type': job_type, "content": content,
               "status": "pending"}
+        
         if kwargs:
             for key ,value in kwargs.items():
                 job[key] = value
-              
-        self.job_queue_list.append(job)
 
+        self.job_queue_list.append(job)
         return job['id']
 
 
