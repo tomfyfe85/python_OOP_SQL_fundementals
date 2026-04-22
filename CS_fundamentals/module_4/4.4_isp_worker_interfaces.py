@@ -183,7 +183,6 @@ class ModernPrinter(Printable, Scannable):
     def scan_document(self):
       return f"[Modern] Scanned document content"
     
-
 # Part 3
 class Office():
     def __init__(self):

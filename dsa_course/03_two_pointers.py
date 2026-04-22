@@ -156,8 +156,6 @@ def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
             reverse_count -= 1
         else:
             count += 1
-        
-
 
 # ============================================
 # REVISION: Quick Review from Module 2

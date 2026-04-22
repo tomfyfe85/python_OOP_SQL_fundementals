@@ -56,7 +56,7 @@ def is_valid_email(email: str) -> bool:
 
     if email.count('@') != 1:
         return False
-    
+
     at_index = email.index("@")
     email_from_at_sign = email[at_index:]
 
