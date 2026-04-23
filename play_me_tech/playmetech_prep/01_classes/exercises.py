@@ -49,7 +49,7 @@ DUNDER (MAGIC) METHODS:
   __len__      → defines len() behaviour
 
 DATACLASSES (modern shortcut):
-  from dataclasses import dataclass, field
+  from dataclasses import dataclass, fields
 
   @dataclass
   class Odds:
@@ -105,7 +105,7 @@ class Match:
 # Add a property `implied_probabilities` that returns a dict:
 #   {"home_win": 0.526, "draw": 0.294, "away_win": 0.238}
 # Implied probability = 1 / decimal_odds, rounded to 3 decimal places.
-# Add a property `favourite` that returns "home_win", "draw", or "away_win"
+# Add a property `favorite` that returns "home_win", "draw", or "away_win"
 # — whichever has the lowest decimal odds.
 
 
@@ -115,21 +115,21 @@ class Odds:
     draw: float
     away_win: float
 
-    def implied_probabilities(self):
+    @property
+    def implied_probabilities(self) -> dict:
         prob_dict = {}
         for field in fields(self):
             value = getattr(self, field.name)
             prob_dict[field.name] = round((1 / value), 3)
         return prob_dict
 
-    def favourite(self):
-        probabilities = self.implied_probabilities()
-        min_key = min(probabilities, key=probabilities.get)
+    @property
+    def favorite(self):
+        probabilities = self.implied_probabilities
+        min_key = max(probabilities, key=probabilities.get) # type: ignore
         return min_key
 
 
-o2 = Odds(3.0, 3.0, 2.5)
-print(o2.favourite())
 # ─────────────────────────────────────────────────────────────────
 # EXERCISE 3 (Intermediate) — Inheritance
 # ─────────────────────────────────────────────────────────────────
@@ -144,20 +144,30 @@ print(o2.favourite())
 #   TennisMatch(Event)    — adds player1, player2, surface (default="hard")
 #     override summary() → "Tennis #<id>: <p1> v <p2> on <surface>"
 
-
+@dataclass
 class Event:
-    # YOUR CODE HERE
-    pass
+    event_id: int    
+    name: str
 
+    def summary(self) -> str:
+        return f"Event #{self.event_id}: {self.name}"
 
+@dataclass
 class FootballMatch(Event):
-    # YOUR CODE HERE
-    pass
+    home_team: str
+    away_team: str
+    
+    def summary(self) -> str:
+        return f"Match #{self.event_id}: {self.home_team} vs {self.away_team}"
 
-
+@dataclass
 class TennisMatch(Event):
-    # YOUR CODE HERE
-    pass
+    player1: str
+    player2: str
+    surface: str = "hard"
+    
+    def summary(self) -> str:
+        return f"Tennis #{self.event_id}: {self.player1} v {self.player2} on {self.surface}"
 
 
 # ─────────────────────────────────────────────────────────────────
@@ -171,11 +181,23 @@ class TennisMatch(Event):
 #
 # This lets traders sort markets by depth automatically.
 
-
+@dataclass
 class BettingMarket:
-    # YOUR CODE HERE
-    pass
+    name: str
+    liquidity: float
+    
+    def __repr__(self) -> str:
+        return f"BettingMarket(name={self.name},  liquidity={self.liquidity})"
+    
+    def __eq__(self, other)-> bool:
+        if isinstance(other, BettingMarket):
+            return self.name == other.name
+        return False
 
+    def __lt__(self, other)-> bool:
+        return self.liquidity < other.liquidity
+    
+    
 
 # ─────────────────────────────────────────────────────────────────
 # EXERCISE 5 (Hard) — Composition & a mini trading ledger
@@ -244,9 +266,9 @@ try:
     test("home prob", probs["home_win"], 0.526)
     test("draw prob", probs["draw"], 0.294)
     test("away prob", probs["away_win"], 0.238)
-    test("favourite", o.favourite, "home_win")
+    test("favorite", o.favorite, "home_win")
     o2 = Odds(3.0, 3.0, 2.5)
-    test("favourite away", o2.favourite, "away_win")
+    test("favorite away", o2.favorite, "away_win")
 except Exception as e:
     print(f"  ❌ ERROR: {e}")
 
