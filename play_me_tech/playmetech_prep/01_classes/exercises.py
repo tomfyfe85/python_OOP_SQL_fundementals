@@ -81,12 +81,22 @@ DATACLASSES (modern shortcut):
 # It should store home_team, away_team, and sport (default="football").
 # It needs a label() method: "Arsenal vs Chelsea (football)"
 # It needs __repr__ that returns the same as label().
+from dataclasses import dataclass, fields
 
+
+@dataclass
 class Match:
-    # YOUR CODE HERE
-    pass
+    home_team: str
+    away_team: str
+    sport: str = "football"
 
-print("hello!")
+    def label(self) -> str:
+        return f"{self.home_team} vs {self.away_team} ({self.sport})"
+
+    def __repr__(self) -> str:
+        return self.label()
+
+
 # ─────────────────────────────────────────────────────────────────
 # EXERCISE 2 (Beginner) — Encapsulation & property
 # ─────────────────────────────────────────────────────────────────
@@ -98,11 +108,28 @@ print("hello!")
 # Add a property `favourite` that returns "home_win", "draw", or "away_win"
 # — whichever has the lowest decimal odds.
 
+
+@dataclass
 class Odds:
-    # YOUR CODE HERE
-    pass
+    home_win: float
+    draw: float
+    away_win: float
+
+    def implied_probabilities(self):
+        prob_dict = {}
+        for field in fields(self):
+            value = getattr(self, field.name)
+            prob_dict[field.name] = round((1 / value), 3)
+        return prob_dict
+
+    def favourite(self):
+        probabilities = self.implied_probabilities()
+        min_key = min(probabilities, key=probabilities.get)
+        return min_key
 
 
+o2 = Odds(3.0, 3.0, 2.5)
+print(o2.favourite())
 # ─────────────────────────────────────────────────────────────────
 # EXERCISE 3 (Intermediate) — Inheritance
 # ─────────────────────────────────────────────────────────────────
@@ -117,13 +144,16 @@ class Odds:
 #   TennisMatch(Event)    — adds player1, player2, surface (default="hard")
 #     override summary() → "Tennis #<id>: <p1> v <p2> on <surface>"
 
+
 class Event:
     # YOUR CODE HERE
     pass
 
+
 class FootballMatch(Event):
     # YOUR CODE HERE
     pass
+
 
 class TennisMatch(Event):
     # YOUR CODE HERE
@@ -140,6 +170,7 @@ class TennisMatch(Event):
 #   - __lt__   → compare by liquidity (enables sorted())
 #
 # This lets traders sort markets by depth automatically.
+
 
 class BettingMarket:
     # YOUR CODE HERE
@@ -171,9 +202,11 @@ class BettingMarket:
 #       ──────────────────────────────────────────────────────
 #       TOTAL               £15.00            £34.00
 
+
 class Bet:
     # YOUR CODE HERE
     pass
+
 
 class Ledger:
     # YOUR CODE HERE
@@ -184,15 +217,21 @@ class Ledger:
 #  TESTS — run this file to check your answers
 # ═══════════════════════════════════════════════════════════════════
 
+
 def test(description, got, expected):
-    status = "✅ PASS" if got == expected else f"❌ FAIL (got {got!r}, expected {expected!r})"
+    status = (
+        "✅ PASS"
+        if got == expected
+        else f"❌ FAIL (got {got!r}, expected {expected!r})"
+    )
     print(f"  {status}  →  {description}")
+
 
 print("\n── Exercise 1: Match ──")
 try:
     m = Match("Arsenal", "Chelsea")
     test("label()", m.label(), "Arsenal vs Chelsea (football)")
-    test("repr",    repr(m),   "Arsenal vs Chelsea (football)")
+    test("repr", repr(m), "Arsenal vs Chelsea (football)")
     m2 = Match("Lakers", "Bulls", sport="basketball")
     test("custom sport", m2.label(), "Lakers vs Bulls (basketball)")
 except Exception as e:
@@ -202,10 +241,10 @@ print("\n── Exercise 2: Odds ──")
 try:
     o = Odds(1.9, 3.4, 4.2)
     probs = o.implied_probabilities
-    test("home prob",  probs["home_win"], 0.526)
-    test("draw prob",  probs["draw"],     0.294)
-    test("away prob",  probs["away_win"], 0.238)
-    test("favourite",  o.favourite, "home_win")
+    test("home prob", probs["home_win"], 0.526)
+    test("draw prob", probs["draw"], 0.294)
+    test("away prob", probs["away_win"], 0.238)
+    test("favourite", o.favourite, "home_win")
     o2 = Odds(3.0, 3.0, 2.5)
     test("favourite away", o2.favourite, "away_win")
 except Exception as e:
@@ -218,7 +257,9 @@ try:
     fm = FootballMatch(2, "Premier League Clash", "Arsenal", "Chelsea")
     test("football summary", fm.summary(), "Match #2: Arsenal vs Chelsea")
     tm = TennisMatch(3, "Wimbledon SF", "Djokovic", "Alcaraz")
-    test("tennis default surface", tm.summary(), "Tennis #3: Djokovic v Alcaraz on hard")
+    test(
+        "tennis default surface", tm.summary(), "Tennis #3: Djokovic v Alcaraz on hard"
+    )
     tm2 = TennisMatch(4, "Roland Garros", "Nadal", "Federer", surface="clay")
     test("tennis clay", tm2.summary(), "Tennis #4: Nadal v Federer on clay")
 except Exception as e:
@@ -229,12 +270,16 @@ try:
     m1 = BettingMarket("Match Winner", 50000.0)
     m2 = BettingMarket("Match Winner", 80000.0)
     m3 = BettingMarket("Over 2.5", 20000.0)
-    test("eq same name",    m1 == m2, True)
-    test("eq diff name",    m1 == m3, False)
-    test("lt by liquidity", m3 < m1,  True)
+    test("eq same name", m1 == m2, True)
+    test("eq diff name", m1 == m3, False)
+    test("lt by liquidity", m3 < m1, True)
     markets = [m1, m3, m2]
     sorted_names = [m.name + str(m.liquidity) for m in sorted(markets)]
-    test("sorted order", sorted_names, ["Over 2.520000.0", "Match Winner50000.0", "Match Winner80000.0"])
+    test(
+        "sorted order",
+        sorted_names,
+        ["Over 2.520000.0", "Match Winner50000.0", "Match Winner80000.0"],
+    )
 except Exception as e:
     print(f"  ❌ ERROR: {e}")
 
@@ -243,14 +288,16 @@ try:
     b1 = Bet("Man Utd to Win", 10.0, 2.5)
     b2 = Bet("Over 2.5 Goals", 5.0, 1.8)
     test("potential return", b1.potential_return, 25.0)
-    test("profit if win",    b1.profit_if_win,    15.0)
+    test("profit if win", b1.profit_if_win, 15.0)
     ledger = Ledger()
     ledger.add_bet(b1)
     ledger.add_bet(b2)
-    test("total staked",           ledger.total_staked(),           15.0)
-    test("total potential return", ledger.total_potential_return(),  34.0)
-    test("best value bet",         ledger.best_value_bet().market,  "Man Utd to Win")
-    print("  ℹ️  (summary() output not auto-tested — call ledger.summary() manually to check formatting)")
+    test("total staked", ledger.total_staked(), 15.0)
+    test("total potential return", ledger.total_potential_return(), 34.0)
+    test("best value bet", ledger.best_value_bet().market, "Man Utd to Win")
+    print(
+        "  ℹ️  (summary() output not auto-tested — call ledger.summary() manually to check formatting)"
+    )
 except Exception as e:
     print(f"  ❌ ERROR: {e}")
 
