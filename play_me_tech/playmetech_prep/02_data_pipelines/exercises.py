@@ -104,8 +104,18 @@ RAW_RECORDS = [
 ]
 
 def parse_records(raw_records: list[dict]) -> list[dict]:
-    # YOUR CODE HERE
-    pass
+
+    clean_list = []
+    nums = "0123456789"
+    for current_record in raw_records:
+        record = current_record
+        if record["home_score"] != "" and record["home_score"] in nums and record["away_score"] != "" and record["away_score"] in nums:
+            current_record["home_score"] = int(record["home_score"])
+            current_record["away_score"] = int(record["away_score"])
+            clean_list.append(current_record)
+    clean_list
+    return clean_list
+
 
 
 # ─────────────────────────────────────────────────────────────────
