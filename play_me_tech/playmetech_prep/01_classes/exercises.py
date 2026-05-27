@@ -117,6 +117,7 @@ class Odds:
 
     @property
     def implied_probabilities(self) -> dict:
+        """returns dictionary of field names : implied probs"""
         prob_dict = {}
         for field in fields(self):
             value = getattr(self, field.name)
@@ -124,11 +125,13 @@ class Odds:
         return prob_dict
 
     @property
-    def favorite(self):
+    def favourite(self) -> str:
+        """"returns field name with the best odds"""
         probabilities = self.implied_probabilities
-        min_key = max(probabilities, key=probabilities.get) # type: ignore
-        return min_key
+        return max(probabilities, key=probabilities.get) #type: ignore
 
+# DO LINKEDIN POST RE-RED SQUIGGLE
+# type: None
 
 # ─────────────────────────────────────────────────────────────────
 # EXERCISE 3 (Intermediate) — Inheritance
@@ -266,9 +269,9 @@ try:
     test("home prob", probs["home_win"], 0.526)
     test("draw prob", probs["draw"], 0.294)
     test("away prob", probs["away_win"], 0.238)
-    test("favorite", o.favorite, "home_win")
+    test("favourite", o.favourite, "home_win")
     o2 = Odds(3.0, 3.0, 2.5)
-    test("favorite away", o2.favorite, "away_win")
+    test("favourite away", o2.favourite, "away_win")
 except Exception as e:
     print(f"  ❌ ERROR: {e}")
 
